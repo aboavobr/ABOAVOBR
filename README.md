@@ -1,6 +1,6 @@
 # ABOAVOBR-AutoBalancing-Obstacle-Avoiding-Voice-Obedient-Beer-Robot
 
-BOM
+## BOM
 
 1x Raspberry Pi 3 Model B+
 
@@ -23,3 +23,6 @@ https://cad.onshape.com/documents/123f6eefae799bc4a059b332/w/fbc0801ffc9ca431e21
 
 Perhaps this parts list is something to start from?
 https://www.instructables.com/id/Arduino-Balance-Balancing-Robot-How-to-Make/
+
+## System Architecture
+![](./Documents/SystemDiagram.png)
