@@ -3,7 +3,7 @@
 ## BOM
 
 Raspberry PI 3B
-1x https://www.ebay.com/itm/Raspberry-Pi-3-Model-B-Plus-1-4GHz-Quad-Core-64Bit-1GB-RAM-2018-Model/261698200759?hash=item3cee6da4b7:g:vogAAOSwv2taw6rG:rk:4:pf:0
+1x https://www.ebay.com/itm/2018-Raspberry-Pi-3-Model-B-Plus-1-4-GHz-64Bit-Quad-Core-WLAN-5GHz/173586132980?hash=item286a8a2ff4:g:HjkAAOSw0ZZbwWbU:rk:3:pf:0
 
 16GB SSD Card
 1x16GB https://www.ebay.com/itm/32Go-64Go-128Go-Samsung-EVO-plus-Micro-SD-SDHC-SDXC-carte-memoire-CLASS-10-UHS-1/262867873846?epid=3027526254&hash=item3d34257036:m:mGOg1OniZnuotYrCTXdgQoA:rk:12:pf:0
