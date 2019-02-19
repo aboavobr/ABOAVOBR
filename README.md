@@ -1,6 +1,11 @@
 # ABOAVOBR-AutoBalancing-Obstacle-Avoiding-Voice-Obedient-Beer-Robot
 
-## BOM
+The intention of this project is to provide you with the necessary details to 3D print, assemble and program your own autobalancing robot with some quite advanced features.
+
+## System Architecture
+![](./Documents/SystemDiagram.png)
+
+## BOM - Bill Of Materials
 
 Raspberry PI 3B
 1x https://www.ebay.com/itm/2018-Raspberry-Pi-3-Model-B-Plus-1-4-GHz-64Bit-Quad-Core-WLAN-5GHz/173586132980?hash=item286a8a2ff4:g:HjkAAOSw0ZZbwWbU:rk:3:pf:0
@@ -35,7 +40,7 @@ Arduino prototype shield board
 1x On/Off button
 https://www.ebay.com/itm/1Pc-Metal-ON-OFF-Switch-16-12mm-12V-Car-LED-Power-Momentary-Push-Button-Durable/113306483006?hash=item1a6197b93e:m:mp48kRIqstgV909ztWxXSMQ
 
-### More general parts you might already have
+## More general parts you might already have
 Black power cable 18AWG
 1x https://hobbyking.com/en_us/turnigy-18awg-siliconewire-black-10m.html
 
@@ -60,14 +65,18 @@ Super glue for PLC
 Dupont cables
 https://www.ebay.com/itm/40-Pcs-Dupont-M-F-M-M-F-F-Cables-Jumper-Breadboard-Wire-GPIO-Ribbon-Pi-Arduino/152953441696?hash=item239cbc4da0:m:murLJ0hFTorZsxOV1A4m49g:rk:1:pf:0
 
-3D Print of these parts
+## 3D model
+This is the open source 3D model for the robot design. You will need to 3D print these parts and glue them together.
+TODO: Add information on printing and building this model.
 https://cad.onshape.com/documents/123f6eefae799bc4a059b332/w/fbc0801ffc9ca431e21d0619/e/835a318b4cb1a3c7ccbc66cf
 
-Build a battery tester for Arduino
+## Battery tester
+Build a battery tester for Arduino. This will be needed to keep track of the LiPo charge, to make sure we do not go below acceptable levels.
 https://pimylifeup.com/arduino-battery-tester/
+
+## Assembly instructions
+TODO: Add instructions here
 
 Starting point for collecting ideas:
 https://www.instructables.com/id/Arduino-Balance-Balancing-Robot-How-to-Make/
 
-## System Architecture
-![](./Documents/SystemDiagram.png)
