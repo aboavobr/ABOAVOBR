@@ -47,7 +47,7 @@ https://www.ebay.com/itm/IMAX-B6-LCD-Screen-Digital-RC-Balance-Charger-for-Lipo-
 XT-60 charger cable
 https://www.ebay.com/itm/15cm-XT-60-To-4-0-Banana-Plug-Balance-Charge-Cable-For-Rc-Helicopter-TS/172163733142?epid=1772837261&hash=item2815c21696:g:HJwAAOSwK6RZGw98:rk:2:pf:0
 
-3s signal extension cable
+2s battery signal extension cable
 https://www.ebay.com/itm/2S-3S-4S-5S-6S-Balancer-JST-XH-Verlangerungskabel-Ladekabel-Lipo-Akku-20cm-24AWG/192145568088?hash=item2cbcc4b158:m:mH6-uYlVbJSk1tZYCgtmmVA:rk:1:pf:0
 
 7.4V LiPo battery. This battery should provide about an hour of fun.
