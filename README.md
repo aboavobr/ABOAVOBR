@@ -30,7 +30,7 @@ Stereo speakers
 1x https://www.ebay.com/itm/Adafruit-I2S-3W-Stereo-Speaker-Bonnet-for-Raspberry-Pi-ADA3346/332322797099?epid=812335952&hash=item4d5ffb762b:g:vZgAAOSwIrZZewqD:rk:16:pf:0
 
 5V USB converter
-1x https://www.ebay.com/itm/DIY-DC-6-35V-to-5V-3A-Double-USB-Converter-Voltage-Step-Down-Regulator-Module/192225954539?epid=8007434633&hash=item2cc18f4aeb:g:nJYAAOSwP61bRflZ:rk:5:pf:0
+1x https://www.ebay.com/itm/DIY-DC-6-35V-to-5V-3A-Double-USB-Converter-Voltage-Step-Down-Regulator-Module/271700574802?epid=23023863344&hash=item3f429dc252:g:oEcAAOSwsXFbTHXr:rk:1:pf:0
 
 Arduino Uno
 1x https://www.ebay.com/itm/UNO-R3-REV3-ATmega328-16U2-100-Compatible-Arduino-ULTIMA-VERSION-CABLE-INCLUIDO/251988165728?hash=item3aabaa4460:g:DpEAAOSwnHZYkv8P:rk:1:pf:0
