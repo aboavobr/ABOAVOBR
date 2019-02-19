@@ -38,6 +38,9 @@ Arduino Uno
 Arduino prototype shield board
 1x https://www.ebay.com/itm/New-Prototyping-Prototype-Shield-ProtoShield-Mini-Breadboard-for-Arduino-UNO/232465486889?hash=item362005d429:g:E68AAOSwgeRZojue:rk:1:pf:0
 
+1x On/Off button
+https://www.ebay.com/itm/1Pc-Metal-ON-OFF-Switch-16-12mm-12V-Car-LED-Power-Momentary-Push-Button-Durable/113306483006?hash=item1a6197b93e:m:mp48kRIqstgV909ztWxXSMQ
+
 LiPo charger
 https://www.ebay.com/itm/IMAX-B6-LCD-Screen-Digital-RC-Balance-Charger-for-Lipo-NiMh-Battery-Adapter-CO/302546132210?hash=item4671279cf2:m:mUG18aPzO0NSal8KrUqdI3g:rk:3:pf:0
 
@@ -47,8 +50,8 @@ https://www.ebay.com/itm/15cm-XT-60-To-4-0-Banana-Plug-Balance-Charge-Cable-For-
 3s signal extension cable
 https://www.ebay.com/itm/2S-3S-4S-5S-6S-Balancer-JST-XH-Verlangerungskabel-Ladekabel-Lipo-Akku-20cm-24AWG/192145568088?hash=item2cbcc4b158:m:mH6-uYlVbJSk1tZYCgtmmVA:rk:1:pf:0
 
-LiPo battery. This battery should provide at least an hour of funplay!
-1x https://hobbyking.com/en_us/turnigy-2200mah-3s-25c-lipo-pack.html
+7.4V LiPo battery. This battery should provide about an hour of fun.
+1x https://hobbyking.com/en_us/zippy-flightmax-2200mah-2s1p-20c.html
 
 Super glue
 1x https://www.ebay.com/itm/2pcs-502-SUPER-GLUE-CYANOACRYLATE-ADHESIVE-PLC/223221375971?hash=item33f907e3e3:g:CWcAAOSwviBZwh3i:rk:1:pf:0
