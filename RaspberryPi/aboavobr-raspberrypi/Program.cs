@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace aboavobr_raspberrypi
+namespace aboavobr.raspberrypi
 {
    public class Program
    {

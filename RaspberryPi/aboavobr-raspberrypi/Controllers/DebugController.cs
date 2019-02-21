@@ -1,17 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using aboavobr.raspberrypi.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
-namespace aboavobr_raspberrypi.Controllers
+namespace aboavobr.raspberrypi.Controllers
 {
    [Route("api/[controller]")]
    [ApiController]
    public class DebugController : ControllerBase
    {
+      private readonly ILogger<DebugController> logger;
+      private readonly ISerialCommunicationService serialCommunicationService;
+
+      public DebugController(ISerialCommunicationService serialCommunicationService, ILogger<DebugController> logger)
+      {
+         this.serialCommunicationService = serialCommunicationService;
+         this.logger = logger;
+      }
+
       // GET api/debug
       [HttpGet]
-      public ActionResult<IEnumerable<string>> Get()
+      public ActionResult<string> Get()
       {
-         return new string[] { "It's alive" };
+         return "It's alive";
+      }
+
+      // GET api/debug/logs
+      [HttpGet("logs")]
+      public ActionResult<string> GetLogs()
+      {
+         return "logs";
+      }
+
+      // GET api/debug/serial
+      [HttpGet("serial")]
+      public ActionResult<string> GetSerial()
+      {
+         return "serial";
       }
    }
 }
