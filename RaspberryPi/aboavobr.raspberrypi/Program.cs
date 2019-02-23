@@ -13,6 +13,7 @@ namespace aboavobr.raspberrypi
       public static IWebHostBuilder CreateWebHostBuilder(string[] args)
       {
          return WebHost.CreateDefaultBuilder(args)
+            .UseUrls("https://*:5000")
             .UseStartup<Startup>();
       }
    }
