@@ -36,7 +36,6 @@ namespace aboavobr.raspberrypi
             app.UseHsts();
          }
 
-         app.UseHttpsRedirection();
          app.UseMvc();
       }
    }

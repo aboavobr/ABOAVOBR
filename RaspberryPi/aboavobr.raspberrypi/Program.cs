@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using System.IO;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
 namespace aboavobr.raspberrypi
@@ -13,7 +14,8 @@ namespace aboavobr.raspberrypi
       public static IWebHostBuilder CreateWebHostBuilder(string[] args)
       {
          return WebHost.CreateDefaultBuilder(args)
-            .UseUrls("https://*:5000")
+            .UseUrls("http://0.0.0.0:5000")
+            .UseContentRoot(Directory.GetCurrentDirectory())
             .UseStartup<Startup>();
       }
    }
