@@ -1,10 +1,10 @@
 ﻿
+using System.Collections.Generic;
+
 namespace aboavobr.raspberrypi.Services
 {
    public interface ISerialCommunicationService
    {
-      bool IsOpen { get; }
-
-      void Open();
+      IEnumerable<string> GetSerialPorts();
    }
 }

@@ -1,4 +1,5 @@
-﻿using aboavobr.raspberrypi.Services;
+﻿using System.Collections.Generic;
+using aboavobr.raspberrypi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -33,9 +34,9 @@ namespace aboavobr.raspberrypi.Controllers
 
       // GET api/debug/serial
       [HttpGet("serial")]
-      public ActionResult<string> GetSerial()
+      public ActionResult<IEnumerable<string>> GetSerial()
       {
-         return "serial";
+         return new ActionResult<IEnumerable<string>>(serialCommunicationService.GetSerialPorts());
       }
    }
 }
