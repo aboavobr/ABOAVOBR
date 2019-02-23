@@ -5,10 +5,10 @@ EXPOSE 443
 
 FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /src
-COPY ["aboavobr-raspberrypi/aboavobr.raspberrypi.csproj", "aboavobr-raspberrypi/"]
-RUN dotnet restore "aboavobr-raspberrypi/aboavobr.raspberrypi.csproj"
+COPY ["aboavobr.raspberrypi/aboavobr.raspberrypi.csproj", "aboavobr.raspberrypi/"]
+RUN dotnet restore "aboavobr.raspberrypi/aboavobr.raspberrypi.csproj"
 COPY . .
-WORKDIR "/src/aboavobr-raspberrypi"
+WORKDIR "/src/aboavobr.raspberrypi"
 RUN dotnet build "aboavobr.raspberrypi.csproj" -c Release -o /app
 
 FROM build AS publish

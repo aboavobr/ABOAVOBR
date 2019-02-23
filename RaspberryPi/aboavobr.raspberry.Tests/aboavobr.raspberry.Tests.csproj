@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\aboavobr-raspberrypi\aboavobr.raspberrypi.csproj" />
+    <ProjectReference Include="..\aboavobr.raspberrypi\aboavobr.raspberrypi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
