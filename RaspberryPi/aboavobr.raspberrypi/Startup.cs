@@ -21,6 +21,7 @@ namespace aboavobr.raspberrypi
       {
          services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+         services.AddSingleton<ISerialPortFactory, SerialPortFactory>();
          services.AddSingleton<ISerialCommunicationService, SerialCommunicationService>();
       }
 

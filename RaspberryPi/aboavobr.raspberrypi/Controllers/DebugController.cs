@@ -32,11 +32,19 @@ namespace aboavobr.raspberrypi.Controllers
          return "logs";
       }
 
-      // GET api/debug/serial
-      [HttpGet("serial")]
-      public ActionResult<IEnumerable<string>> GetSerial()
+      // GET api/debug/serial/ports
+      [HttpGet("serial/ports")]
+      public ActionResult<IEnumerable<string>> GetSerialPorts()
       {
-         return new ActionResult<IEnumerable<string>>(serialCommunicationService.GetSerialPorts());
+         return new ActionResult<IEnumerable<string>>(serialCommunicationService.GetAvailableSerialPorts());
+      }
+
+      [HttpPost("serial")]
+      public ActionResult WriteSerial(string command)
+      {
+         serialCommunicationService.SendMessage(command);
+         
+         return Ok();
       }
    }
 }

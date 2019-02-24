@@ -5,6 +5,10 @@ namespace aboavobr.raspberrypi.Services
 {
    public interface ISerialCommunicationService
    {
-      IEnumerable<string> GetSerialPorts();
+      bool IsConnected { get; }
+
+      void SendMessage(string message);
+
+      IEnumerable<string> GetAvailableSerialPorts();
    }
 }
