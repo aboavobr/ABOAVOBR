@@ -13,7 +13,7 @@ namespace aboavobr.raspberrypi.Services
          serialPortInput = new SerialPortInput(portName, isVirtual);
          serialPortInput.SetPort(portName, 9600);
 
-         serialPortInput.ConnectionStatusChanged += OnConnectionStatusChanged; ;
+         serialPortInput.ConnectionStatusChanged += OnConnectionStatusChanged;
          serialPortInput.MessageReceived += OnMessageReceived;
       }
 
