@@ -10,6 +10,8 @@ namespace aboavobr.raspberrypi.Services
 
       bool IsConnected { get; }
 
+      string Name { get; }
+
       bool Connect();
 
       void Disconnect();

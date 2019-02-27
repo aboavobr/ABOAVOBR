@@ -41,6 +41,8 @@ namespace aboavobr.raspberrypi.Services
 
       public bool IsConnected => File.Exists(inputFile) && File.Exists(outputFile);
 
+      public string Name => "Fake Port";
+
       public bool Connect()
       {
          if (!File.Exists(inputFile))

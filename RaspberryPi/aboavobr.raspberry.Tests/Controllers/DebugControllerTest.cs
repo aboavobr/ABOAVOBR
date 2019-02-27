@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
 using aboavobr.raspberrypi.Controllers;
 using aboavobr.raspberrypi.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -27,6 +27,48 @@ namespace Tests.Controllers
          var actualValue = subject.Get().Value;
 
          Assert.AreEqual("It's alive", actualValue);
+      }
+
+      [Test]
+      public void GetSerialPorts_ReturnsAllAvailablePorts()
+      {
+         var expectedPorts = new[]
+         {
+            "/dev/tty1",
+            "/dev/ttyACM0",
+         };
+
+         serialCommunicationServiceMock.Setup(x => x.GetAvailableSerialPorts()).Returns(expectedPorts);
+
+         var subject = CreateSubject();
+
+         var ports = subject.GetSerialPorts().Value;
+
+         CollectionAssert.AreEqual(expectedPorts, ports);
+      }
+
+      [Test]
+      public void GetSerialPort_ReturnsUsedPort()
+      {
+         const string ExpectedPort = "COM5";
+         serialCommunicationServiceMock.SetupGet(x => x.PortName).Returns(ExpectedPort);
+
+         var subject = CreateSubject();
+
+         var port = subject.GetSerialPort().Value;
+
+         Assert.AreEqual(ExpectedPort, port);
+      }
+
+      [Test]
+      public void WriteSerial_GivenCommand_WritsToCommunicationService()
+      {
+         var subject = CreateSubject();
+
+         var result = subject.WriteSerial("command");
+
+         Assert.IsInstanceOf(typeof(OkResult), result);
+         serialCommunicationServiceMock.Verify(x => x.SendMessage("command"));
       }
 
       private DebugController CreateSubject()

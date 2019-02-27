@@ -32,6 +32,8 @@ namespace aboavobr.raspberrypi.Services
 
       public bool IsConnected => serialPort != null && serialPort.IsConnected;
 
+      public string PortName => serialPort.Name;
+
       public void SendMessage(string message)
       {
          serialPort.Write(message);

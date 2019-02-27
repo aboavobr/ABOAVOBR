@@ -10,6 +10,7 @@ namespace aboavobr.raspberrypi.Services
 
       public SerialPort(string portName, bool isVirtual)
       {
+         Name = portName;
          serialPortInput = new SerialPortInput(portName, isVirtual);
          serialPortInput.SetPort(portName, 9600);
 
@@ -22,6 +23,8 @@ namespace aboavobr.raspberrypi.Services
       public event EventHandler<bool> ConnectionStatusChangedEvent;
 
       public bool IsConnected => serialPortInput.IsConnected;
+
+      public string Name { get; }
 
       public bool Connect()
       {

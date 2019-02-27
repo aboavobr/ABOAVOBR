@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using aboavobr.raspberrypi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,18 +26,17 @@ namespace aboavobr.raspberrypi.Controllers
          return "It's alive";
       }
 
-      // GET api/debug/logs
-      [HttpGet("logs")]
-      public ActionResult<string> GetLogs()
-      {
-         return "logs";
-      }
-
       // GET api/debug/serial/ports
       [HttpGet("serial/ports")]
       public ActionResult<IEnumerable<string>> GetSerialPorts()
       {
          return new ActionResult<IEnumerable<string>>(serialCommunicationService.GetAvailableSerialPorts());
+      }
+
+      [HttpGet("serial/port")]
+      public ActionResult<string> GetSerialPort()
+      {
+         return new ActionResult<string>(serialCommunicationService.PortName);
       }
 
       [HttpPost("serial")]
