@@ -1,6 +1,8 @@
-FROM arm64v8/debian
+FROM resin/armv7hf-debian-qemu
 
 LABEL maintainer "benj.huser@gmail.com"
+
+RUN [ "cross-build-start" ]
 
 RUN apt-get update && \
     apt-get upgrade -y && \
@@ -31,3 +33,5 @@ COPY main.sh /
 
 RUN ["chmod", "+x", "/main.sh"]
 ENTRYPOINT ["sh", "/main.sh"]
+
+RUN [ "cross-build-end" ] 
