@@ -82,5 +82,7 @@ Last but not least in case you want to do some debugging on the device youc an a
 
 ### Troubleshooting
 Q:How do I fix this "permission denied" message when using docker commands?  
-A:Likely you need to add your non root user to the Docker group: sudo usermod -aG docker pi
+A:Likely you need to add your non root user to the Docker group:  
+sudo usermod -aG docker pi  
+Where "pi" is your username.
 
