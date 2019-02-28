@@ -31,7 +31,6 @@ COPY . /src/
 
 COPY main.sh /
 
-RUN ["chmod", "+x", "/main.sh"]
 ENTRYPOINT ["sh", "/main.sh"]
 
 RUN [ "cross-build-end" ] 
