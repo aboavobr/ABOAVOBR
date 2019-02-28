@@ -17,6 +17,8 @@ TODO: Add once it's defined and done
 ### Debug and Test
 Debugging works out of the box when using Visual Studio, just put your breakpoints in the Controllers and Services and start it in Debug Mode. You can then either make requests via a normal browser or use a dedicated tool like [Postman](https://www.getpostman.com/).  
 
+If you are working on Mac or Linux you can use VS Code instead of Visual Studio.
+
 Basic functionality should be covered by unit tests, a dedicated project exists in the solution.  
 
 #### Serial Port Configuration
