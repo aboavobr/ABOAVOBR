@@ -62,11 +62,11 @@ In order to get it up and running first install docker on your Raspberry Pi:
 
 To get the latest version of the container run:  
 
-    docker pull aboavobr/raspberry
+    sudo docker pull aboavobr/raspberry
 
 To start you have to provide a few parameters together with the command:  
 
-    docker run -d -p 1337:5000 --device=/dev/ttyACM0 aboavobr/raspberry
+    sudo docker run -d -p 1337:5000 --device=/dev/ttyACM0 aboavobr/raspberry
 
 This will run the container in detached mode (*-d*) and will map the requests coming in on port 1337 to the web app that is listening on port 5000 (*-p 1337:5000*). The rest api will then be available on  
 
@@ -78,4 +78,4 @@ You also have to specify a device as the container can not access the devices ot
 
 Last but not least in case you want to do some debugging on the device youc an also run it in foreground mode to observe the logs:  
 
-    docker run -d -it 1337:5000 --device=/dev/ttyACM0 aboavobr/raspberry
+    sudo docker run -d -it 1337:5000 --device=/dev/ttyACM0 aboavobr/raspberry
