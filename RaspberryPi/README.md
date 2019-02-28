@@ -73,8 +73,8 @@ This will run the container in detached mode (*-d*) and will map the requests co
     http://<IP-of-Raspberry/>:1337/api/debug
 
 You can choose whatever port you like, but it has to be mapped to 5000 to match with the configuration of the REST API.  
-You also have to specify a device as the container can not access the devices otherwise except when run in privileged mode.  
-**Your device might be different than the example specified here. Use the tty command to check your device.**
+You also have to specify a device (the Arduino USB connection device) as the container can not access the devices otherwise except when run in privileged mode.  
+**Your device might be different than the example specified here.**
 
 Last but not least in case you want to do some debugging on the device youc an also run it in foreground mode to observe the logs:  
 
