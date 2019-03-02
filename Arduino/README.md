@@ -21,7 +21,7 @@ To upload the sketch run:
     docker run --rm -it -v "$(pwd):/src" --device=/dev/ttyACM0 strm/dev-arduino upload  
 
 **Note:** The uploading only works on a linux device, as passing through devices within Docker for Windows is not supported.  
-Also if your device named differently accordingly adjust the path.
+If your device is named differently, then adjust the path according to the name.
 
 ## Continuous Integration and Deplyoment
 A CI build to verify the sketch is setup in [Azure Devops](https://benjsawesometfstest.visualstudio.com/ABOAVOBR/_build?definitionId=34&_a=summary).  
