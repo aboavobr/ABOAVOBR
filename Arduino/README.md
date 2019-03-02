@@ -20,7 +20,7 @@ To upload the sketch run:
 
     docker run --rm -it -v "$(pwd):/src" --device=/dev/ttyACM0 strm/dev-arduino upload  
 
-**Note:** The uploading only works on a linux device, as passing through devices within Docker for Linux is not supported.  
+**Note:** The uploading only works on a linux device, as passing through devices within Docker for Windows is not supported.  
 Also if your device named differently accordingly adjust the path.
 
 ## Continuous Integration and Deplyoment
