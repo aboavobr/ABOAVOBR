@@ -5,10 +5,18 @@
              x:Class="aboavobr.phone.MainPage">
 
     <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
+        <Label Text="ABOAVOBR Phone App" 
            HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
-    </StackLayout>
+           VerticalOptions="StartAndExpand" />
+
+      <Label Text="URL" HorizontalOptions="Start" VerticalOptions="Start"/>
+      <Entry HorizontalOptions="FillAndExpand" VerticalOptions="Center" Text="{Binding Url, Mode=TwoWay}"/>
+
+      <Button Text="Connect" Command="{Binding ConnectCommand}" />
+
+      <ActivityIndicator IsRunning="{Binding IsConnecting}" />
+      <Label Text="{Binding ConnectionStatus, Mode=TwoWay}" HorizontalOptions="CenterAndExpand" />
+      <Label Text="{Binding Error}" TextColor="Red" HorizontalOptions="CenterAndExpand" />
+   </StackLayout>
 
 </ContentPage>

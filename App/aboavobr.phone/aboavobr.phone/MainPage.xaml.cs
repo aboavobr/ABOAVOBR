@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using aboavobr.phone.Services;
+using aboavobr.phone.ViewModels;
 using Xamarin.Forms;
 
 namespace aboavobr.phone
@@ -12,6 +9,8 @@ namespace aboavobr.phone
       public MainPage()
       {
          InitializeComponent();
+
+         BindingContext = new MainPageViewModel(new AboavobrRestEndpoint());
       }
    }
 }
