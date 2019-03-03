@@ -1,16 +1,14 @@
-﻿using aboavobr.phone.Services;
-using aboavobr.phone.ViewModels;
+﻿using aboavobr.phone.ViewModels;
 using Xamarin.Forms;
 
 namespace aboavobr.phone
 {
    public partial class MainPage : ContentPage
    {
-      public MainPage()
+      public MainPage(IMainPageViewModel mainPageViewModel)
       {
          InitializeComponent();
-
-         BindingContext = new MainPageViewModel(new AboavobrRestEndpoint());
+         BindingContext = mainPageViewModel;
       }
    }
 }

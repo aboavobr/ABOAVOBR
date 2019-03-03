@@ -4,7 +4,7 @@ using aboavobr.phone.Services;
 
 namespace aboavobr.phone.ViewModels
 {
-   public class MainPageViewModel : ViewModelBase
+   public class MainPageViewModel : ViewModelBase, IMainPageViewModel
    {
       private readonly IAboavobrRestEndpoint aboavobrRestEndpoint;
 
