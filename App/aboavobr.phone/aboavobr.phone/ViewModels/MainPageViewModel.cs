@@ -7,18 +7,19 @@ namespace aboavobr.phone.ViewModels
    public class MainPageViewModel : ViewModelBase, IMainPageViewModel
    {
       private readonly IAboavobrRestEndpoint aboavobrRestEndpoint;
-
+      private readonly INavigationService navigationService;
       private string url;
       private string connectionStatus;
       private bool isConnecting;
       private string error;
 
-      public MainPageViewModel(IAboavobrRestEndpoint aboavobrRestEndpoint)
+      public MainPageViewModel(IAboavobrRestEndpoint aboavobrRestEndpoint, INavigationService navigationService)
       {
          connectionStatus = "Not Connected";
          ConnectCommand = new DelegateCommand(async () => await Connect(), () => !string.IsNullOrEmpty(Url));
          Url = "http://10.0.2.2:5000";
          this.aboavobrRestEndpoint = aboavobrRestEndpoint;
+         this.navigationService = navigationService;
       }
 
       public string Url
@@ -98,6 +99,8 @@ namespace aboavobr.phone.ViewModels
          if (isConnected)
          {
             ConnectionStatus = "Connected";
+
+            await navigationService.NavigateToControlPage();
          }
          else
          {

@@ -5,10 +5,9 @@ namespace aboavobr.phone
 {
    public partial class MainPage : ContentPage
    {
-      public MainPage(IMainPageViewModel mainPageViewModel)
+      public MainPage()
       {
          InitializeComponent();
-         BindingContext = mainPageViewModel;
       }
    }
 }

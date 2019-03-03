@@ -14,8 +14,10 @@ namespace aboavobr.phone
          InitializeComponent();
 
          var container = InitializeServices();
-
-         MainPage = container.Resolve<MainPage>();
+         MainPage = new NavigationPage(new MainPage())
+         {
+            BindingContext = container.Resolve<IMainPageViewModel>()
+         };
       }
 
       protected override void OnStart()
@@ -37,8 +39,9 @@ namespace aboavobr.phone
       {
          var builder = new ContainerBuilder();
          builder.RegisterType<AboavobrRestEndpoint>().As<IAboavobrRestEndpoint>().SingleInstance();
+         builder.RegisterType<NavigationService>().As<INavigationService>();
+
          builder.RegisterType<MainPageViewModel>().As<IMainPageViewModel>();
-         builder.RegisterType<MainPage>();
 
          return builder.Build();
       }
