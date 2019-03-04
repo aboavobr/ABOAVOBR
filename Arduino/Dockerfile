@@ -1,4 +1,4 @@
-FROM aboavobr/arduino-devenv
+FROM aboavobr/arduino-buildenv
 
 LABEL maintainer "benj.huser@gmail.com"
 
