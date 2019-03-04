@@ -20,7 +20,5 @@ else
   PORT="-p $2"
 fi
 
-
-
 ino build -m $BOARD_MODEL $PORT
 ino upload -m $BOARD_MODEL $PORT
