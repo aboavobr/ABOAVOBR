@@ -37,4 +37,16 @@ And then upload to the Arduino with:
 
     docker run --device=/dev/ttyACM0 aboavobr/arduino  
 
-**Disclaimer:** The container is still a work in progress and does not yet function as it should
+You can specify two optional arguments and pass that to the container:  
+- The Board Model according to the "ino" tool used for building and uploading  
+- The serial port to use  
+
+The default board model is the "uno", you only need to specify something else if you have a different arduino running.  
+You can find more infos on available board models on the [ino quickstart](http://inotool.org/quickstart#tweaking-parameters).  
+By default ino is guessing the serial port, by the fact that we only pass one to the container it should work out of the box. However if you have a different scenario you can still specify it.
+
+Here an example of a parametrized build and upload from a raspberry pi:  
+
+
+    docker run --device=/dev/ttyACM0 aboavobr/arduino mega2560 /dev/ttyACM0
+
