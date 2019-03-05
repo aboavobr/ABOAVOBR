@@ -5,5 +5,7 @@ namespace aboavobr.phone.Services
    public interface IAboavobrRestEndpoint
    {
       Task<bool> Connect(string url);
+
+      Task SendCommandAsync(string valueToSend);
    }
 }

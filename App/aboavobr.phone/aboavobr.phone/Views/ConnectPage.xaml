@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:aboavobr.phone"
-             x:Class="aboavobr.phone.MainPage">
+             x:Class="aboavobr.phone.Views.ConnectPage">
 
     <StackLayout>
         <Label Text="ABOAVOBR Phone App" 

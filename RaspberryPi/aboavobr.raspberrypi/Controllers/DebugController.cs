@@ -40,7 +40,7 @@ namespace aboavobr.raspberrypi.Controllers
       }
 
       [HttpPost("serial")]
-      public ActionResult WriteSerial(string command)
+      public ActionResult WriteSerial([FromBody]string command)
       {
          serialCommunicationService.SendMessage(command);
          
