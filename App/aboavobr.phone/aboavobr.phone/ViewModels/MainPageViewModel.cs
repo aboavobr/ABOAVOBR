@@ -17,6 +17,7 @@ namespace aboavobr.phone.ViewModels
       {
          connectionStatus = "Not Connected";
          ConnectCommand = new DelegateCommand(async () => await Connect(), () => !string.IsNullOrEmpty(Url));
+         OpenSettingsCommand = new DelegateCommand(() => { });
          Url = "http://10.0.2.2:5000";
          this.aboavobrRestEndpoint = aboavobrRestEndpoint;
          this.navigationService = navigationService;
@@ -37,6 +38,8 @@ namespace aboavobr.phone.ViewModels
       }
 
       public DelegateCommand ConnectCommand { get; }
+
+      public DelegateCommand OpenSettingsCommand { get; }
 
       public bool IsConnecting
       {

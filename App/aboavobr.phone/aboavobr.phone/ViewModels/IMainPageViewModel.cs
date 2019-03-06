@@ -4,6 +4,8 @@
    {
       DelegateCommand ConnectCommand { get; }
 
+      DelegateCommand OpenSettingsCommand { get; }
+
       string ConnectionStatus { get; set; }
 
       string Error { get; set; }

@@ -8,6 +8,11 @@
         <Label Text="ABOAVOBR Phone App" 
            HorizontalOptions="Center"
            VerticalOptions="StartAndExpand" />
+      <ImageButton Command="{Binding OpenSettingsCommand}" Source="settingsicon.png"
+                   BackgroundColor="Transparent"
+                   Scale="0.5"
+                   HorizontalOptions="End"
+                   VerticalOptions="Start"/>
 
       <Label Text="URL" HorizontalOptions="Start" VerticalOptions="Start"/>
       <Entry HorizontalOptions="FillAndExpand" VerticalOptions="Center" Text="{Binding Url, Mode=TwoWay}"/>
