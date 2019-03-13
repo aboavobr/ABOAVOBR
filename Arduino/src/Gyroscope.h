@@ -16,6 +16,9 @@ class Gyroscope
   public:
     Gyroscope();
     void Loop();
+    float GetYaw();
+    float GetPitch();
+    float GetRoll();
     
   private:
 	// class default I2C address is 0x68

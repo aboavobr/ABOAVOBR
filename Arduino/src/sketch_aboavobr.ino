@@ -4,8 +4,10 @@
 #include "MPU6050_6Axis_MotionApps20.h"
 #include "Wire.h"
 #include "Gyroscope.h"
+#include "MovementController.h"
 
 Gyroscope *gyroscope;
+MovementController *movementController;
 
 void setup() {
   // put your setup code here, to run once:
@@ -13,6 +15,7 @@ void setup() {
   Serial.begin(9600);
   while(!Serial);
   gyroscope = new Gyroscope();
+  movementController = new MovementController(gyroscope);
 }
 
 void loop() {
@@ -34,7 +37,7 @@ void loop() {
 		Serial.write("nope");
 	  }
   }
-
-  Serial.println("2");
+  
   gyroscope->Loop();
+  movementController->Loop();
 }

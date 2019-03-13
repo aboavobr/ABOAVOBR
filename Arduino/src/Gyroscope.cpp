@@ -5,7 +5,7 @@
 #include "Wire.h"
 #include "MPU6050_6Axis_MotionApps20.h"
 
-#define OUTPUT_READABLE_YAWPITCHROLL
+//#define OUTPUT_READABLE_YAWPITCHROLL
 
 uint8_t devStatus;      // return status after each device operation (0 = success, !0 = error)
 uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
@@ -72,11 +72,27 @@ Gyroscope::Gyroscope()
   }  
 }
 
+float Gyroscope::GetYaw()
+{
+  return ypr[0] * 180/M_PI;
+}
+
+float Gyroscope::GetPitch()
+{
+  return ypr[1] * 180/M_PI;
+}
+
+float Gyroscope::GetRoll()
+{
+  return ypr[2] * 180/M_PI;
+}
+
 void Gyroscope::Loop()
 {
     // if programming failed, don't try to do anything
     if (!dmpReady) return;
 
+    /*
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) {
         // other program behavior stuff here
@@ -90,6 +106,7 @@ void Gyroscope::Loop()
         // .
         // .
     }
+    */
 
     // reset interrupt flag and get INT_STATUS byte
     mpuInterrupt = false;
@@ -115,6 +132,10 @@ void Gyroscope::Loop()
         // track FIFO count here in case there is > 1 packet available
         // (this lets us immediately read more without waiting for an interrupt)
         fifoCount -= packetSize;
+
+        mpu.dmpGetQuaternion(&q, fifoBuffer);
+        mpu.dmpGetGravity(&gravity, &q);
+        mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
 
         #ifdef OUTPUT_READABLE_QUATERNION
             // display quaternion values in easy matrix form: w x y z
@@ -143,9 +164,6 @@ void Gyroscope::Loop()
 
         #ifdef OUTPUT_READABLE_YAWPITCHROLL
             // display Euler angles in degrees
-            mpu.dmpGetQuaternion(&q, fifoBuffer);
-            mpu.dmpGetGravity(&gravity, &q);
-            mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
             Serial.print("ypr\t");
             Serial.print(ypr[0] * 180/M_PI);
             Serial.print("\t");
