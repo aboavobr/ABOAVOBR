@@ -10,7 +10,5 @@ namespace aboavobr.raspberrypi.Services
       bool IsConnected { get; }
 
       void SendMessage(string message);
-
-      IEnumerable<string> GetAvailableSerialPorts();
    }
 }

@@ -23,6 +23,8 @@ namespace aboavobr.raspberrypi
 
          services.AddSingleton<ISerialPortFactory, SerialPortFactory>();
          services.AddSingleton<ISerialCommunicationService, SerialCommunicationService>();
+         services.AddSingleton<IStreamingService, RaspberryPiStreamingService>();
+         services.AddSingleton<ISerialPortService, SerialPortService>();
       }
 
       // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
