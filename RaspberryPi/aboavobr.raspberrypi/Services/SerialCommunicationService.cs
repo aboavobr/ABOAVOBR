@@ -9,209 +9,217 @@ using Microsoft.Win32;
 
 namespace aboavobr.raspberrypi.Services
 {
-    public class SerialCommunicationService : ISerialCommunicationService
-    {
-        private readonly IHostingEnvironment environment;
-        private readonly IConfiguration configuration;
-        private readonly ILogger<SerialCommunicationService> logger;
-        private readonly ISerialPortFactory serialPortFactory;
+   public class SerialCommunicationService : ISerialCommunicationService
+   {
+      private const string BatteryLifeIdentifier = "batteryLife";
+      private const string GetBatteryLifeCommand = "getBatteryLife";
+      private const string CommandSeparator = ":";
 
-        private int batteryLife = -1;
+      private readonly IHostingEnvironment environment;
+      private readonly IConfiguration configuration;
+      private readonly ILogger<SerialCommunicationService> logger;
+      private readonly ISerialPortFactory serialPortFactory;
 
-        private ISerialPort serialPort;
-        private Timer batteryLifeTimer;
+      private int batteryLife = -1;
 
-        public SerialCommunicationService(
-           IHostingEnvironment environment,
-           IConfiguration configuration,
-           ILogger<SerialCommunicationService> logger,
-           ISerialPortFactory serialPortFactory)
-        {
-            this.environment = environment;
-            this.configuration = configuration;
-            this.logger = logger;
-            this.serialPortFactory = serialPortFactory;
+      private ISerialPort serialPort;
+      private Timer batteryLifeTimer;
 
-            InitializeCommunicationPort();
-            SetupBatteryLifePolling();
-        }
+      public SerialCommunicationService(
+         IHostingEnvironment environment,
+         IConfiguration configuration,
+         ILogger<SerialCommunicationService> logger,
+         ISerialPortFactory serialPortFactory)
+      {
+         this.environment = environment;
+         this.configuration = configuration;
+         this.logger = logger;
+         this.serialPortFactory = serialPortFactory;
 
-        public bool IsConnected => serialPort != null && serialPort.IsConnected;
+         InitializeCommunicationPort();
+         SetupBatteryLifePolling();
+      }
 
-        public string PortName => serialPort.Name;
+      public bool IsConnected => serialPort != null && serialPort.IsConnected;
 
-        public void SendMessage(string message)
-        {
-            serialPort.Write(message);
-        }
+      public string PortName => serialPort.Name;
 
-        public IEnumerable<string> GetAvailableSerialPorts()
-        {
-            return GetAvailablePorts();
-        }
+      public void SendMessage(string message)
+      {
+         serialPort.Write(message);
+      }
 
-        public int GetBatteryLife()
-        {
-            return batteryLife;
-        }
+      public IEnumerable<string> GetAvailableSerialPorts()
+      {
+         return GetAvailablePorts();
+      }
 
-        private void InitializeCommunicationPort()
-        {
-            var port = string.Empty;
-            var useFakePort = false;
+      public int GetBatteryLife()
+      {
+         return batteryLife;
+      }
 
-            if (environment.IsDevelopment())
-            {
-                logger.LogDebug("Is Debug Environment, will check for FakePort setting");
+      private void InitializeCommunicationPort()
+      {
+         var port = string.Empty;
+         var useFakePort = false;
 
-                useFakePort = configuration.GetValue<bool>("FakePort:IsActive");
+         if (environment.IsDevelopment())
+         {
+            logger.LogDebug("Is Debug Environment, will check for FakePort setting");
 
-                if (useFakePort)
-                {
-                    logger.LogDebug("Using Fake Communication Port");
-                    port = "FakePort";
-                }
-                else
-                {
-                    logger.LogDebug("Will not use fake port");
-                }
-            }
-
-            if (!useFakePort)
-            {
-                var fixedPort = configuration.GetValue<string>("SerialPort");
-                if (!string.IsNullOrEmpty(fixedPort))
-                {
-                    logger.LogDebug($"Fixed Serial Port set in configuration: {fixedPort}");
-                    port = fixedPort;
-                }
-                else
-                {
-                    logger.LogDebug("No fixed port configuration found - scanning for ports...");
-
-                    var availableDevices = GetAvailablePorts();
-
-                    if (availableDevices.Length == 1)
-                    {
-                        port = availableDevices[0];
-                        logger.LogDebug($"Found exactly one available port - will use this one");
-                    }
-                    else if (availableDevices.Length > 1)
-                    {
-                        port = availableDevices[0];
-                        logger.LogDebug($"Found multiple ports - will use first one. If this is not the right device, consider specifying it using the SerialPort configuration");
-                    }
-                    else
-                    {
-                        logger.LogDebug("No Ports found. Make sure device is connected properly and if run in a docker container --device flag is used. Otherwise see docs.");
-                        throw new InvalidOperationException("No Ports found. Make sure device is connected properly and if run in a docker container --device flag is used. Otherwise see docs.");
-                    }
-                }
-            }
-
-            ConnectSerialPort(port, useFakePort);
-        }
-
-        private void SetupBatteryLifePolling()
-        {
-            void SendBatteryLifeRequest(object state){
-               serialPort.Write("getBatteryLife");
-
-               logger.LogDebug($"Sending get battery life request");
-            }
-
-            batteryLifeTimer = new Timer(SendBatteryLifeRequest, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(30));
-        }
-
-        private void ConnectSerialPort(string port, bool useFakePort)
-        {
-            logger.LogDebug($"Establishing Connection to Port {port}...");
+            useFakePort = configuration.GetValue<bool>("FakePort:IsActive");
 
             if (useFakePort)
             {
-                serialPort = serialPortFactory.CreateFakePort();
+               logger.LogDebug("Using Fake Communication Port");
+               port = "FakePort";
             }
             else
             {
-                serialPort = serialPortFactory.CreatePort(port);
+               logger.LogDebug("Will not use fake port");
             }
+         }
 
-            serialPort.ConnectionStatusChangedEvent += OnSerialPortConnectionChanged;
-            serialPort.MessageReceivedEvent += OnSerialPortMessageReceived;
-            serialPort.Connect();
-        }
-
-        private void OnSerialPortMessageReceived(object sender, string message)
-        {
-            logger.LogDebug($"Received Message from Serial Port: {message}");
-
-            if (message.StartsWith("batteryLife:")){
-               var batteryLifeString = message.Split(":")[1];
-
-               if (int.TryParse(batteryLifeString, out var currentState)){
-                  batteryLife = currentState;
-                  logger.LogDebug($"Read Battery Life: {batteryLife}");
-               }
-               else{
-                  logger.LogDebug($"Could not read battery life: {batteryLifeString}");
-               }
-            }
-        }
-
-        private void OnSerialPortConnectionChanged(object sender, bool isConnected)
-        {
-            logger.LogDebug($"Serial Port Connection Changed: {isConnected}");
-        }
-
-        private string[] GetAvailablePorts()
-        {
-            // Copied from https://github.com/JTrotta/MonoSerialPort/blob/006ac36503ef2c1e2a682961fc0720f358e21ca0/Port/SerialPort.cs
-            var platform = (int)Environment.OSVersion.Platform;
-            var availableSerialPorts = new List<string>();
-
-            logger.LogDebug("Starting to scan the available communication ports...");
-
-            // Are we on Unix?
-            if (platform == 4 || platform == 128)
+         if (!useFakePort)
+         {
+            var fixedPort = configuration.GetValue<string>("SerialPort");
+            if (!string.IsNullOrEmpty(fixedPort))
             {
-                logger.LogDebug("We are on a Unix System, will look for /dev/tty* ports");
-
-                var ttys = Directory.GetFiles("/dev/", "tty*");
-                foreach (var device in ttys)
-                {
-                    logger.LogDebug($"Found Port: {device}");
-
-                    if (device.StartsWith("/dev/ttyS") || device.StartsWith("/dev/ttyUSB") || device.StartsWith("/dev/ttyACM"))
-                    {
-                        availableSerialPorts.Add(device);
-                    }
-                }
+               logger.LogDebug($"Fixed Serial Port set in configuration: {fixedPort}");
+               port = fixedPort;
             }
             else
             {
-                logger.LogDebug("We are on a Windows System, will check registriy for COM Ports");
+               logger.LogDebug("No fixed port configuration found - scanning for ports...");
 
-                // Do Windows Magic
-                using (var subkey = Registry.LocalMachine.OpenSubKey("HARDWARE\\DEVICEMAP\\SERIALCOMM"))
-                {
-                    if (subkey != null)
-                    {
-                        var names = subkey.GetValueNames();
-                        foreach (var value in names)
-                        {
-                            var port = subkey.GetValue(value, "").ToString();
-                            if (!string.IsNullOrEmpty(port))
-                            {
-                                logger.LogDebug($"Found Port: {port}");
+               var availableDevices = GetAvailablePorts();
 
-                                availableSerialPorts.Add(port);
-                            }
-                        }
-                    }
-                }
+               if (availableDevices.Length == 1)
+               {
+                  port = availableDevices[0];
+                  logger.LogDebug($"Found exactly one available port - will use this one");
+               }
+               else if (availableDevices.Length > 1)
+               {
+                  port = availableDevices[0];
+                  logger.LogDebug($"Found multiple ports - will use first one. If this is not the right device, consider specifying it using the SerialPort configuration");
+               }
+               else
+               {
+                  logger.LogDebug("No Ports found. Make sure device is connected properly and if run in a docker container --device flag is used. Otherwise see docs.");
+                  throw new InvalidOperationException("No Ports found. Make sure device is connected properly and if run in a docker container --device flag is used. Otherwise see docs.");
+               }
             }
+         }
 
-            return availableSerialPorts.ToArray();
-        }
-    }
+         ConnectSerialPort(port, useFakePort);
+      }
+
+      private void SetupBatteryLifePolling()
+      {
+         void SendBatteryLifeRequest(object state)
+         {
+            serialPort.Write(GetBatteryLifeCommand);
+
+            logger.LogDebug($"Sending get battery life request");
+         }
+
+         batteryLifeTimer = new Timer(SendBatteryLifeRequest, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(30));
+      }
+
+      private void ConnectSerialPort(string port, bool useFakePort)
+      {
+         logger.LogDebug($"Establishing Connection to Port {port}...");
+
+         if (useFakePort)
+         {
+            serialPort = serialPortFactory.CreateFakePort();
+         }
+         else
+         {
+            serialPort = serialPortFactory.CreatePort(port);
+         }
+
+         serialPort.ConnectionStatusChangedEvent += OnSerialPortConnectionChanged;
+         serialPort.MessageReceivedEvent += OnSerialPortMessageReceived;
+         serialPort.Connect();
+      }
+
+      private void OnSerialPortMessageReceived(object sender, string message)
+      {
+         logger.LogDebug($"Received Message from Serial Port: {message}");
+
+         if (message.StartsWith($"{BatteryLifeIdentifier}{CommandSeparator}"))
+         {
+            var batteryLifeString = message.Split(CommandSeparator)[1];
+
+            if (int.TryParse(batteryLifeString, out var currentState))
+            {
+               batteryLife = currentState;
+               logger.LogDebug($"Read Battery Life: {batteryLife}");
+            }
+            else
+            {
+               logger.LogDebug($"Could not read battery life: {batteryLifeString}");
+            }
+         }
+      }
+
+      private void OnSerialPortConnectionChanged(object sender, bool isConnected)
+      {
+         logger.LogDebug($"Serial Port Connection Changed: {isConnected}");
+      }
+
+      private string[] GetAvailablePorts()
+      {
+         // Copied from https://github.com/JTrotta/MonoSerialPort/blob/006ac36503ef2c1e2a682961fc0720f358e21ca0/Port/SerialPort.cs
+         var platform = (int)Environment.OSVersion.Platform;
+         var availableSerialPorts = new List<string>();
+
+         logger.LogDebug("Starting to scan the available communication ports...");
+
+         // Are we on Unix?
+         if (platform == 4 || platform == 128)
+         {
+            logger.LogDebug("We are on a Unix System, will look for /dev/tty* ports");
+
+            var ttys = Directory.GetFiles("/dev/", "tty*");
+            foreach (var device in ttys)
+            {
+               logger.LogDebug($"Found Port: {device}");
+
+               if (device.StartsWith("/dev/ttyS") || device.StartsWith("/dev/ttyUSB") || device.StartsWith("/dev/ttyACM"))
+               {
+                  availableSerialPorts.Add(device);
+               }
+            }
+         }
+         else
+         {
+            logger.LogDebug("We are on a Windows System, will check registriy for COM Ports");
+
+            // Do Windows Magic
+            using (var subkey = Registry.LocalMachine.OpenSubKey("HARDWARE\\DEVICEMAP\\SERIALCOMM"))
+            {
+               if (subkey != null)
+               {
+                  var names = subkey.GetValueNames();
+                  foreach (var value in names)
+                  {
+                     var port = subkey.GetValue(value, "").ToString();
+                     if (!string.IsNullOrEmpty(port))
+                     {
+                        logger.LogDebug($"Found Port: {port}");
+
+                        availableSerialPorts.Add(port);
+                     }
+                  }
+               }
+            }
+         }
+
+         return availableSerialPorts.ToArray();
+      }
+   }
 }
