@@ -2,8 +2,10 @@
 
 namespace aboavobr.phone.Services
 {
-   public interface INavigationService
+   public interface IUiService
    {
       Task NavigateToControlPage();
+
+      void DisplayAlert(string title, string message, string cancel);
    }
 }

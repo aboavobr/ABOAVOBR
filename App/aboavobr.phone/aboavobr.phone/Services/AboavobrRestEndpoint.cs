@@ -79,7 +79,7 @@ namespace aboavobr.phone.Services
 
       private Uri CreateConnectionUri(string endpoint)
       {
-         var url = $"{baseUrl}endpoint";
+         var url = $"{baseUrl}{endpoint}";
          return new Uri(url);
       }
    }

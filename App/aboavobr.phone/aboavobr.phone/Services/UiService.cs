@@ -6,11 +6,11 @@ using Xamarin.Forms;
 
 namespace aboavobr.phone.Services
 {
-   public class NavigationService : INavigationService
+   public class UiService : IUiService
    {
       private readonly IApp app;
 
-      public NavigationService(IApp app)
+      public UiService(IApp app)
       {
          this.app = app;
       }
@@ -22,7 +22,17 @@ namespace aboavobr.phone.Services
             BindingContext = app.Container.Resolve<IControlPageViewModel>()
          };
 
-         await app.Navigation.PushAsync(controlPage);
+         await SwitchPageAsync(controlPage);
+      }
+
+      public void DisplayAlert(string title, string message, string cancel)
+      {
+         Device.BeginInvokeOnMainThread(async () => await app.MainPage.DisplayAlert(title, message, cancel));
+      }
+
+      private async Task SwitchPageAsync(Page newPage)
+      {
+         await app.Navigation.PushAsync(newPage);
       }
    }
 }

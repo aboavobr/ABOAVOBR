@@ -7,13 +7,17 @@ namespace aboavobr.phone.ViewModels
    public class ControlPageViewModel : ViewModelBase, IControlPageViewModel
    {
       private const string UknownBatteryLife = "Unknown";
-      private readonly IAboavobrRestEndpoint aboavobrRestEndpoint;
-      private string batteryLifeInPercent = UknownBatteryLife;
+      private const int BatteryHealthyStateThreshold = 20;
 
-      public ControlPageViewModel(IAboavobrRestEndpoint aboavobrRestEndpoint)
+      private readonly IAboavobrRestEndpoint aboavobrRestEndpoint;
+      private readonly IUiService uiService;
+      private string batteryLifeInPercent = UknownBatteryLife;
+      private bool wasAlreadyNotified;
+
+      public ControlPageViewModel(IAboavobrRestEndpoint aboavobrRestEndpoint, IUiService uiService)
       {
          this.aboavobrRestEndpoint = aboavobrRestEndpoint;
-
+         this.uiService = uiService;
          new Timer(SendBatteryLifeRequest, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(30));
       }
 
@@ -37,6 +41,12 @@ namespace aboavobr.phone.ViewModels
          if (batteryLife > 0)
          {
             BatteryLifeInPercent = $"{batteryLife}%";
+
+            if (!wasAlreadyNotified && batteryLife < BatteryHealthyStateThreshold)
+            {
+               wasAlreadyNotified = true;
+               uiService.DisplayAlert("Battery Low", "Battery is low, consider chargin it up soon", "Ok");
+            }
          }
          else
          {

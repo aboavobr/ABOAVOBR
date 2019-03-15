@@ -8,5 +8,7 @@ namespace aboavobr.phone
       INavigation Navigation { get; }
 
       IContainer Container { get; }
+
+      Page MainPage { get; }
    }
 }
