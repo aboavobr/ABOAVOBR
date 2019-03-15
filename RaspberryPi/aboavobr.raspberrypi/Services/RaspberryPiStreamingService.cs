@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Unosquare.RaspberryIO;
-using Unosquare.WiringPi;
+using static Unosquare.RaspberryIO.Pi;
 
 namespace aboavobr.raspberrypi.Services
 {
@@ -31,23 +31,22 @@ namespace aboavobr.raspberrypi.Services
          {
             logger.LogDebug("Camera device \"/dev/vchiq\" was not detected, Streaming service is disabled");
          }
-
-         Pi.Init<BootstrapWiringPi>();
       }
 
       public bool IsEnabled { get; }
 
-      public string CaptureImage()
+      public async Task<string> CaptureImage()
       {
-         var pictureBytes = Pi.Camera.CaptureImageJpeg(640, 480);
-         var targetPath = "/home/capture.jpg";
+         var targetPath = $"image-{DateTime.UtcNow.Ticks}.jpg";
          if (File.Exists(targetPath))
          {
             File.Delete(targetPath);
          }
 
-         File.WriteAllBytes(targetPath, pictureBytes);
-         logger.LogDebug($"Took picture -- Byte count: {pictureBytes.Length}");
+         var result = await Camera.CaptureImageJpegAsync(640, 480);
+         await File.WriteAllBytesAsync(targetPath, result);
+
+         logger.LogDebug($"Took picture: {targetPath}");
 
          return targetPath;
       }

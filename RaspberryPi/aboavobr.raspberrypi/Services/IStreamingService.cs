@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace aboavobr.raspberrypi.Services
 {
@@ -6,7 +7,7 @@ namespace aboavobr.raspberrypi.Services
    {
       bool IsEnabled { get; }
 
-      string CaptureImage();
+      Task<string> CaptureImage();
 
       void CaptureVideoStream();
    }

@@ -19,7 +19,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="MonoSerialPort" Version="1.0.15" />
     <PackageReference Include="Unosquare.Raspberry.IO" Version="0.18.1" />
-    <PackageReference Include="Unosquare.WiringPi" Version="0.2.4" />
   </ItemGroup>
 
 </Project>

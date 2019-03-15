@@ -1,4 +1,5 @@
-﻿using aboavobr.raspberrypi.Services;
+﻿using System.Threading.Tasks;
+using aboavobr.raspberrypi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -24,9 +25,9 @@ namespace aboavobr.raspberrypi.Controllers
       }
 
       [HttpGet("image")]
-      public IActionResult GetImageCapture()
+      public async Task<IActionResult> GetImageCapture()
       {
-         var imagePath = streamingService.CaptureImage();
+         var imagePath = await streamingService.CaptureImage();
          var image = System.IO.File.OpenRead(imagePath);
          return File(image, "image/jpeg");
       }
