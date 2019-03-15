@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace aboavobr.phone.Services
 {
@@ -18,9 +16,11 @@ namespace aboavobr.phone.Services
 
       public AboavobrRestEndpoint()
       {
-         client = new HttpClient();
-         client.Timeout = TimeSpan.FromSeconds(10);
-         client.MaxResponseContentBufferSize = 256000;
+         client = new HttpClient
+         {
+            Timeout = TimeSpan.FromSeconds(10),
+            MaxResponseContentBufferSize = 256000
+         };
       }
 
       public async Task<bool> Connect(string url)
@@ -47,6 +47,22 @@ namespace aboavobr.phone.Services
 
          var uri = new Uri(commandUrl);
          var response = await client.PostAsync(uri, new StringContent(valueToSend, Encoding.UTF8, "application/json"));
+      }
+
+      public async Task<int> GetBatteryLifeAsync()
+      {
+         var commandUrl = $"{baseUrl}{AppApiEndpoint}/battery";
+
+         var uri = new Uri(commandUrl);
+         var response = await client.GetAsync(uri);
+
+         if (response.IsSuccessStatusCode)
+         {
+            var content = await response.Content.ReadAsStringAsync();
+            return int.Parse(content);
+         }
+
+         return -1;
       }
    }
 }
