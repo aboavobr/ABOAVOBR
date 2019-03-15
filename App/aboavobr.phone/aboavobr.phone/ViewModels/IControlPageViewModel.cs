@@ -4,6 +4,6 @@ namespace aboavobr.phone.ViewModels
 {
    public interface IControlPageViewModel
    {
-      ICommand ToggleCommand { get; }
+      string BatteryLifeInPercent { get; }
    }
 }

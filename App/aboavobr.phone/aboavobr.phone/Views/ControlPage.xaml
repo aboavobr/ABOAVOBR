@@ -2,12 +2,19 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="aboavobr.phone.Views.ControlPage">
-    <ContentPage.Content>
-      <StackLayout>
-         <Label Text="ABOAVOBR Phone App" 
-           HorizontalOptions="Center"
+   <ContentPage.Content>
+      <Grid>
+         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+         </Grid.RowDefinitions>
+         <StackLayout Orientation="Horizontal" Grid.Row="0">
+            <Label Text="ABOAVOBR" 
+           HorizontalOptions="Start"
            VerticalOptions="StartAndExpand" />
-         <Button Text="Toggle" Command="{Binding ToggleCommand}"/>
-      </StackLayout>
-    </ContentPage.Content>
+            <Label Text="Battery:" />
+            <Label Text="{Binding BatteryLifeInPercent}" />
+         </StackLayout>
+      </Grid>
+   </ContentPage.Content>
 </ContentPage>

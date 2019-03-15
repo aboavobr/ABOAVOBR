@@ -51,7 +51,7 @@ namespace aboavobr.phone
 
          builder.RegisterInstance<IApp>(this).SingleInstance();
 
-         builder.RegisterType<NavigationService>().As<INavigationService>().SingleInstance();
+         builder.RegisterType<UiService>().As<IUiService>().SingleInstance();
 
          builder.RegisterType<MainPageViewModel>().As<IMainPageViewModel>();
          builder.RegisterType<ControlPageViewModel>().As<IControlPageViewModel>();
