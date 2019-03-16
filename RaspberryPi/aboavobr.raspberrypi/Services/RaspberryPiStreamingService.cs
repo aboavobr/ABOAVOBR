@@ -1,15 +1,14 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using static Unosquare.RaspberryIO.Pi;
+using Unosquare.RaspberryIO;
 
 namespace aboavobr.raspberrypi.Services
 {
    /// <summary>
    /// This service uses the unosquare raspberry pi package. For more info see here: https://github.com/unosquare/raspberryio#the-camera-module
-   /// 
+   /// This relies on the raspistill and raspivid, if they are not available this won't work. 
    /// </summary>
    public class RaspberryPiStreamingService : IStreamingService
    {
@@ -35,20 +34,13 @@ namespace aboavobr.raspberrypi.Services
 
       public bool IsEnabled { get; }
 
-      public async Task<string> CaptureImage()
+      public async Task<byte[]> CaptureImageAsync()
       {
-         var targetPath = $"image-{DateTime.UtcNow.Ticks}.jpg";
-         if (File.Exists(targetPath))
-         {
-            File.Delete(targetPath);
-         }
+         var pictureBytes = await Pi.Camera.CaptureImageJpegAsync(640, 480);
 
-         var result = await Camera.CaptureImageJpegAsync(640, 480);
-         await File.WriteAllBytesAsync(targetPath, result);
+         logger.LogDebug($"Took picture -- Byte count: {pictureBytes.Length}");
 
-         logger.LogDebug($"Took picture: {targetPath}");
-
-         return targetPath;
+         return pictureBytes;
       }
 
       public void CaptureVideoStream()

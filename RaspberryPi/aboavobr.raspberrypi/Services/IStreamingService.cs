@@ -7,7 +7,7 @@ namespace aboavobr.raspberrypi.Services
    {
       bool IsEnabled { get; }
 
-      Task<string> CaptureImage();
+      Task<byte[]> CaptureImageAsync();
 
       void CaptureVideoStream();
    }

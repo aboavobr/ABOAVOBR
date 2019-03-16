@@ -27,9 +27,8 @@ namespace aboavobr.raspberrypi.Controllers
       [HttpGet("image")]
       public async Task<IActionResult> GetImageCapture()
       {
-         var imagePath = await streamingService.CaptureImage();
-         var image = System.IO.File.OpenRead(imagePath);
-         return File(image, "image/jpeg");
+         var pictureBytes = await  streamingService.CaptureImageAsync();
+         return File(pictureBytes, "image/jpeg");
       }
    }
 }
