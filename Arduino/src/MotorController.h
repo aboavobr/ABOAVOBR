@@ -7,15 +7,14 @@
 
 #include "Arduino.h"
 
-enum Direction
-{
-  Forward = 0,
-  Backward = 1
-};
-
 class MotorController
 {
   public:
+    enum Direction
+    {
+      Forward = 0,
+      Backward = 1
+    };
 
   
     MotorController(byte enablePin, byte in1, byte in2);
