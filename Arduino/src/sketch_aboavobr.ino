@@ -40,12 +40,12 @@ void loop() {
 	  if (state == 0)
 	  {
 		 digitalWrite(LED_BUILTIN, LOW);
-     rightMotor->SetDirection(Direction::Forward);
+     //rightMotor->SetDirection(Direction::Forward);
 	  }
 	  else if(state == 1)
 	  {
 		  digitalWrite(LED_BUILTIN, HIGH);
-      rightMotor->SetDirection(Direction::Backward);
+      //rightMotor->SetDirection(Direction::Backward);
 	  }
 	  else
 	  {

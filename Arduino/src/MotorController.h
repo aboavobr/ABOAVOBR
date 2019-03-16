@@ -20,6 +20,7 @@ class MotorController
   
     MotorController(byte enablePin, byte in1, byte in2);
     void SetPwm(byte pwm);
+    byte GetPwm();
     void SetDirection(Direction newDirection);
     
   private:

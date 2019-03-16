@@ -17,13 +17,18 @@ MotorController::MotorController(byte enablePin, byte in1, byte in2)
   //Initial rotation direction
   SetDirection(Direction::Forward);
 
-  SetPwm(0xFF);
+  SetPwm(0x00);
 }
 
 void MotorController::SetPwm(byte pwm)
 {
   pwmOutput = pwm;
   analogWrite(enablePin, pwmOutput);
+}
+
+byte MotorController::GetPwm()
+{
+  return pwmOutput;
 }
 
 void MotorController::SetDirection(Direction newDirection)

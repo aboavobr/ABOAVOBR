@@ -18,11 +18,14 @@ class MovementController
     
   private:
     //Define Variables we'll be connecting to
-    double Setpoint, Input, Output;
+    double PIDForwardSetpoint, PIDFordwardInput, PIDForwardOutput;
+    double PIDBackwardSetpoint, PIDBackwardInput, PIDBackwardOutput;
+    double PIDForwardMovement;
     
     //Specify the links and initial tuning parameters
-    double Kp=2, Ki=5, Kd=1;
-    PID *myPID;
+    double Kp=25, Ki=1, Kd=0;
+    PID *PIDForward;
+    PID *PIDBackward;
     Gyroscope *gyroscope;
     MotorController* leftMotor;
     MotorController *rightMotor;

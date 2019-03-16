@@ -4,14 +4,19 @@
 
 //#define OUTPUT_PID_DATA
 //#define OUTPUT_GYROSCOPE_DATA
+//#define OUTPUT_MOTOR_CONTROL_DATA
 
 MovementController::MovementController(Gyroscope *inGyroscope, MotorController *leftMotor, MotorController *rightMotor)
 {
   gyroscope = inGyroscope;
 
-  Setpoint = 0;
-  myPID = new PID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
-  myPID->SetMode(AUTOMATIC);
+  PIDForwardSetpoint = 0;
+  PIDForward = new PID(&PIDFordwardInput, &PIDForwardOutput, &PIDForwardSetpoint, Kp, Ki, Kd, DIRECT);
+  PIDForward->SetMode(AUTOMATIC);
+
+  PIDBackwardSetpoint = 0;
+  PIDBackward = new PID(&PIDBackwardInput, &PIDBackwardOutput, &PIDBackwardSetpoint, Kp, Ki, Kd, DIRECT);
+  PIDBackward->SetMode(AUTOMATIC);
 
   this->leftMotor = leftMotor;
   this->rightMotor = rightMotor;
@@ -19,12 +24,56 @@ MovementController::MovementController(Gyroscope *inGyroscope, MotorController *
 
 void MovementController::Loop()
 {
-  Input = gyroscope->GetPitch();
-  myPID->Compute();
+  PIDFordwardInput = gyroscope->GetPitch();
+  PIDForward->Compute();
+
+  PIDBackwardInput = gyroscope->GetPitch() * -1;
+  PIDBackward->Compute();
+
+  PIDForwardMovement = PIDForwardOutput - PIDBackwardOutput;
+
+  if (gyroscope->GetPitch() > 25 || gyroscope->GetPitch() < -25)
+  {
+    leftMotor->SetPwm(0x00);
+    rightMotor->SetPwm(0x00);
+  }
+  else if (PIDForwardMovement >= 0)
+  {
+    leftMotor->SetDirection(Direction::Forward); 
+    leftMotor->SetPwm(PIDForwardMovement);
+    rightMotor->SetDirection(Direction::Forward);
+    rightMotor->SetPwm(PIDForwardMovement);
+
+    #ifdef OUTPUT_MOTOR_CONTROL_DATA
+      Serial.print("Forward with PWM ");
+    #endif
+  }
+  else
+  {
+    leftMotor->SetDirection(Direction::Backward);                                                                                                                                                                                                                                                                                                     
+    leftMotor->SetPwm(PIDForwardMovement * -1);
+    rightMotor->SetDirection(Direction::Backward);
+    rightMotor->SetPwm(PIDForwardMovement * -1);
+
+    #ifdef OUTPUT_MOTOR_CONTROL_DATA
+      Serial.print("Backward. ");
+    #endif
+  }
+
+  #ifdef OUTPUT_MOTOR_CONTROL_DATA
+    Serial.print("Left motor PWM ");
+    Serial.print(leftMotor->GetPwm());
+    Serial.print("\tRight motor PWM ");
+    Serial.println(rightMotor->GetPwm());
+  #endif
   
   #ifdef OUTPUT_PID_DATA
     Serial.print("PID: ");
-    Serial.println(Output);
+    Serial.print(PIDForwardOutput);
+    Serial.print("\t");
+    Serial.print(PIDBackwardOutput);
+    Serial.print("\t");
+    Serial.println(PIDForwardMovement);
   #endif
 
   #ifdef OUTPUT_GYROSCOPE_DATA
