@@ -39,9 +39,9 @@ void MovementController::Loop()
   }
   else if (PIDForwardMovement >= 0)
   {
-    leftMotor->SetDirection(MotorController::Direction::Forward); 
+    leftMotor->SetDirection(MotorController::Forward); 
     leftMotor->SetPwm(PIDForwardMovement);
-    rightMotor->SetDirection(MotorController::Direction::Forward);
+    rightMotor->SetDirection(MotorController::Forward);
     rightMotor->SetPwm(PIDForwardMovement);
 
     #ifdef OUTPUT_MOTOR_CONTROL_DATA
@@ -50,9 +50,9 @@ void MovementController::Loop()
   }
   else
   {
-    leftMotor->SetDirection(MotorController::Direction::Backward);                                                                                                                                                                                                                                                                                                     
+    leftMotor->SetDirection(MotorController::Backward);                                                                                                                                                                                                                                                                                                     
     leftMotor->SetPwm(PIDForwardMovement * -1);
-    rightMotor->SetDirection(MotorController::Direction::Backward);
+    rightMotor->SetDirection(MotorController::Backward);
     rightMotor->SetPwm(PIDForwardMovement * -1);
 
     #ifdef OUTPUT_MOTOR_CONTROL_DATA
