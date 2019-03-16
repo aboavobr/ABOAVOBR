@@ -15,7 +15,7 @@ MotorController::MotorController(byte enablePin, byte in1, byte in2)
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
   //Initial rotation direction
-  SetDirection(Direction::Forward);
+  SetDirection(MotorController::Direction::Forward);
 
   SetPwm(0x00);
 }
@@ -31,7 +31,7 @@ byte MotorController::GetPwm()
   return pwmOutput;
 }
 
-void MotorController::SetDirection(Direction newDirection)
+void MotorController::SetDirection(MotorController::Direction newDirection)
 {
   direction = newDirection;
 
