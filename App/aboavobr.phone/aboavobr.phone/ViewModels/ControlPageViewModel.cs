@@ -13,19 +13,19 @@ namespace aboavobr.phone.ViewModels
 
       private readonly IAboavobrRestEndpoint aboavobrRestEndpoint;
       private readonly IUiService uiService;
+      private Timer batteryLifeRequestTimer;
+      private Timer previewImageTimer;
       private string batteryLifeInPercent = UknownBatteryLife;
       private bool wasAlreadyNotified;
       private ImageSource imageSource;
 
       private bool cameraSupportChecked;
+      private bool cameraIsSupported;
 
       public ControlPageViewModel(IAboavobrRestEndpoint aboavobrRestEndpoint, IUiService uiService)
       {
          this.aboavobrRestEndpoint = aboavobrRestEndpoint;
          this.uiService = uiService;
-
-         new Timer(SendBatteryLifeRequest, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(30));
-         new Timer(UpdatePreviewImage, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(5));
       }
 
       public string BatteryLifeInPercent
@@ -54,7 +54,32 @@ namespace aboavobr.phone.ViewModels
          }
       }
 
-      public bool CameraIsSupported { get; private set; }
+      public bool CameraIsSupported
+      {
+         get
+         {
+            return cameraIsSupported;
+         }
+         private set
+         {
+            SetProperty(ref cameraIsSupported, value);
+            OnPropertyChanged(nameof(DisplayCameraNotSupportedMessage));
+         }
+      }
+
+      public bool DisplayCameraNotSupportedMessage => !CameraIsSupported;
+
+      public void OnAppearing()
+      {
+         batteryLifeRequestTimer = new Timer(SendBatteryLifeRequest, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(30));
+         previewImageTimer = new Timer(UpdatePreviewImage, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(10));
+      }
+
+      public void OnDisappearing()
+      {
+         batteryLifeRequestTimer.Dispose();
+         previewImageTimer.Dispose();
+      }
 
       private async void SendBatteryLifeRequest(object state)
       {

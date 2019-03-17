@@ -1,11 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:converter="clr-namespace:aboavobr.phone.Views.Converter"
              x:Class="aboavobr.phone.Views.ControlPage">
-   <ContentPage.Resources>
-      <converter:InvertedValueConverter x:Key="InvertedValueConverter" />
-   </ContentPage.Resources>
    
    <ContentPage.Content>
       <Grid>
@@ -22,7 +18,7 @@
             <Label Text="{Binding BatteryLifeInPercent}" />
          </StackLayout>
          <Image Grid.Row="1" Source="{Binding ImageSource}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Aspect="AspectFill" IsVisible="{Binding IsCameraSupported}" />
-         <Label Grid.Row="1" Text="Camera not Supported" HorizontalOptions="FillAndExpand" IsVisible="{Binding IsCameraSupported, Converter={StaticResource InvertedValueConverter}}" />
+         <Label Grid.Row="1" Text="Camera not Supported" HorizontalOptions="FillAndExpand" IsVisible="{Binding DisplayCameraNotSupportedMessage}}" />
       </Grid>
    </ContentPage.Content>
 </ContentPage>

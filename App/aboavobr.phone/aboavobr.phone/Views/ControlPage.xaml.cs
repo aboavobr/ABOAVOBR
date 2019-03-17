@@ -1,4 +1,5 @@
 ﻿
+using aboavobr.phone.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,6 +11,26 @@ namespace aboavobr.phone.Views
       public ControlPage()
       {
          InitializeComponent();
+      }
+
+      protected override void OnAppearing()
+      {
+         base.OnAppearing();
+
+         if (BindingContext is IDisposableViewModel dispoableViewModel)
+         {
+            dispoableViewModel.OnAppearing();
+         }
+      }
+
+      protected override void OnDisappearing()
+      {
+         base.OnDisappearing();
+
+         if (BindingContext is IDisposableViewModel dispoableViewModel)
+         {
+            dispoableViewModel.OnDisappearing();
+         }
       }
    }
 }
