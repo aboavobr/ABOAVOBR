@@ -1,4 +1,5 @@
-﻿using aboavobr.raspberrypi.Services;
+﻿using System.Runtime.InteropServices;
+using aboavobr.raspberrypi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -23,8 +24,18 @@ namespace aboavobr.raspberrypi
 
          services.AddSingleton<ISerialPortFactory, SerialPortFactory>();
          services.AddSingleton<ISerialCommunicationService, SerialCommunicationService>();
-         services.AddSingleton<IStreamingService, RaspberryPiStreamingService>();
          services.AddSingleton<ISerialPortService, SerialPortService>();
+
+         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+         {
+            // Use Dev Streaming Service
+            services.AddSingleton<IStreamingService, FakeStreamingService>();
+         }
+         else
+         {
+            // We are probably on the raspberry now
+            services.AddSingleton<IStreamingService, RaspberryPiStreamingService>();
+         }
       }
 
       // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
