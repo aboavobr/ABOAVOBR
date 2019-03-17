@@ -7,5 +7,7 @@ namespace aboavobr.phone.Services
       Task<bool> Connect(string url);
 
       Task SendCommandAsync(string valueToSend);
+
+      Task<int> GetBatteryLifeAsync();
    }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace aboavobr.phone.Services
 {
@@ -18,18 +16,17 @@ namespace aboavobr.phone.Services
 
       public AboavobrRestEndpoint()
       {
-         client = new HttpClient();
-         client.Timeout = TimeSpan.FromSeconds(10);
-         client.MaxResponseContentBufferSize = 256000;
+         client = new HttpClient
+         {
+            Timeout = TimeSpan.FromSeconds(10),
+            MaxResponseContentBufferSize = 256000
+         };
       }
 
       public async Task<bool> Connect(string url)
       {
-         var heartbeatUrl = $"{url}{AppApiEndpoint}/heartbeat";
-
-         baseUrl = string.Empty;
-         var uri = new Uri(heartbeatUrl);
-
+         baseUrl = url;
+         var uri = CreateAppUri("heartbeat");
          var response = await client.GetAsync(uri);
 
          if (response.IsSuccessStatusCode)
@@ -38,6 +35,7 @@ namespace aboavobr.phone.Services
             return true;
          }
 
+         baseUrl = string.Empty;
          return false;
       }
 
@@ -47,6 +45,42 @@ namespace aboavobr.phone.Services
 
          var uri = new Uri(commandUrl);
          var response = await client.PostAsync(uri, new StringContent(valueToSend, Encoding.UTF8, "application/json"));
+      }
+
+      public async Task<int> GetBatteryLifeAsync()
+      {
+         var uri = CreateAppUri("battery");
+         var response = await client.GetAsync(uri);
+
+         var content = await GetResponseContentAsync(response);
+         if (!string.IsNullOrEmpty(content))
+         {
+            return int.Parse(content);
+         }
+
+         return -1;
+      }
+
+      private async Task<string> GetResponseContentAsync(HttpResponseMessage response)
+      {
+         if (response.IsSuccessStatusCode)
+         {
+            var content = await response.Content.ReadAsStringAsync();
+            return content;
+         }
+
+         return string.Empty;
+      }
+
+      private Uri CreateAppUri(string endpoint)
+      {
+         return CreateConnectionUri($"{AppApiEndpoint}/{endpoint}");
+      }
+
+      private Uri CreateConnectionUri(string endpoint)
+      {
+         var url = $"{baseUrl}{endpoint}";
+         return new Uri(url);
       }
    }
 }

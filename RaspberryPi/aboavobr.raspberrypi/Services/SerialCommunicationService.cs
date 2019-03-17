@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -11,12 +12,20 @@ namespace aboavobr.raspberrypi.Services
 {
    public class SerialCommunicationService : ISerialCommunicationService
    {
+      private const string BatteryLifeIdentifier = "batteryLife";
+      private const string GetBatteryLifeCommand = "getBatteryLife";
+      private const string CommandSeparator = ":";
+
       private readonly IHostingEnvironment environment;
       private readonly IConfiguration configuration;
       private readonly ILogger<SerialCommunicationService> logger;
       private readonly ISerialPortFactory serialPortFactory;
+
+      private int batteryLife = -1;
+
       private readonly ISerialPortService serialPortService;
       private ISerialPort serialPort;
+      private Timer batteryLifeTimer;
 
       public SerialCommunicationService(
          IHostingEnvironment environment,
@@ -31,6 +40,7 @@ namespace aboavobr.raspberrypi.Services
          this.serialPortFactory = serialPortFactory;
          this.serialPortService = serialPortService;
          InitializeCommunicationPort();
+         SetupBatteryLifePolling();
       }
 
       public bool IsConnected => serialPort != null && serialPort.IsConnected;
@@ -40,6 +50,11 @@ namespace aboavobr.raspberrypi.Services
       public void SendMessage(string message)
       {
          serialPort.Write(message);
+      }
+
+      public int GetBatteryLife()
+      {
+         return batteryLife;
       }
 
       private void InitializeCommunicationPort()
@@ -99,6 +114,18 @@ namespace aboavobr.raspberrypi.Services
          ConnectSerialPort(port, useFakePort);
       }
 
+      private void SetupBatteryLifePolling()
+      {
+         void SendBatteryLifeRequest(object state)
+         {
+            serialPort.Write(GetBatteryLifeCommand);
+
+            logger.LogDebug($"Sending get battery life request");
+         }
+
+         batteryLifeTimer = new Timer(SendBatteryLifeRequest, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(30));
+      }
+
       private void ConnectSerialPort(string port, bool useFakePort)
       {
          logger.LogDebug($"Establishing Connection to Port {port}...");
@@ -121,7 +148,20 @@ namespace aboavobr.raspberrypi.Services
       {
          logger.LogDebug($"Received Message from Serial Port: {message}");
 
-         /* Buffer Messages? */
+         if (message.StartsWith($"{BatteryLifeIdentifier}{CommandSeparator}"))
+         {
+            var batteryLifeString = message.Split(CommandSeparator)[1];
+
+            if (int.TryParse(batteryLifeString, out var currentState))
+            {
+               batteryLife = currentState;
+               logger.LogDebug($"Read Battery Life: {batteryLife}");
+            }
+            else
+            {
+               logger.LogDebug($"Could not read battery life: {batteryLifeString}");
+            }
+         }
       }
 
       private void OnSerialPortConnectionChanged(object sender, bool isConnected)
