@@ -11,5 +11,6 @@ namespace aboavobr.phone.Services
       Task<int> GetBatteryLifeAsync();
 
       Task<byte[]> GetImageAsync();
+      Task<bool> IsCameraSupported();
    }
 }

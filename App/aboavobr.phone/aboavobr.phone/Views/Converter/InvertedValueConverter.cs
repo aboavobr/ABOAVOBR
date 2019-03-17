@@ -1,0 +1,24 @@
+﻿using System;
+using System.Globalization;
+using Xamarin.Forms;
+
+namespace aboavobr.phone.Views.Converter
+{
+   public class InvertedValueConverter : IValueConverter
+   {
+      public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+      {
+         if (value is bool boolValue)
+         {
+            return !boolValue;
+         }
+
+         return value;
+      }
+
+      public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+      {
+         throw new NotImplementedException();
+      }
+   }
+}

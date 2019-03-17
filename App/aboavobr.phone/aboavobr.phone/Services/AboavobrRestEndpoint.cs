@@ -70,6 +70,20 @@ namespace aboavobr.phone.Services
          return await response.Content.ReadAsByteArrayAsync();
       }
 
+      public async Task<bool> IsCameraSupported()
+      {
+         var uri = CreateCameraUri("isenabled");
+         var response = await client.GetAsync(uri);
+
+         var content = await GetResponseContentAsync(response);
+         if (!string.IsNullOrEmpty(content))
+         {
+            return bool.Parse(content);
+         }
+
+         return false;
+      }
+
       private async Task<string> GetResponseContentAsync(HttpResponseMessage response)
       {
          if (response.IsSuccessStatusCode)

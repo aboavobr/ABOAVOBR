@@ -17,12 +17,15 @@ namespace aboavobr.phone.ViewModels
       private bool wasAlreadyNotified;
       private ImageSource imageSource;
 
+      private bool cameraSupportChecked;
+
       public ControlPageViewModel(IAboavobrRestEndpoint aboavobrRestEndpoint, IUiService uiService)
       {
          this.aboavobrRestEndpoint = aboavobrRestEndpoint;
          this.uiService = uiService;
+
          new Timer(SendBatteryLifeRequest, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(30));
-         new Timer(UpdatePreviewImage, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(5));
+         new Timer(UpdatePreviewImage, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(5));
       }
 
       public string BatteryLifeInPercent
@@ -51,6 +54,8 @@ namespace aboavobr.phone.ViewModels
          }
       }
 
+      public bool CameraIsSupported { get; private set; }
+
       private async void SendBatteryLifeRequest(object state)
       {
          var batteryLife = await aboavobrRestEndpoint.GetBatteryLifeAsync();
@@ -73,8 +78,17 @@ namespace aboavobr.phone.ViewModels
 
       private async void UpdatePreviewImage(object state)
       {
-         var image = await aboavobrRestEndpoint.GetImageAsync();
-         ImageSource = ImageSource.FromStream(() => new MemoryStream(image));
+         if (!cameraSupportChecked)
+         {
+            cameraSupportChecked = true;
+            CameraIsSupported = await aboavobrRestEndpoint.IsCameraSupported();
+         }
+
+         if (CameraIsSupported)
+         {
+            var image = await aboavobrRestEndpoint.GetImageAsync();
+            ImageSource = ImageSource.FromStream(() => new MemoryStream(image));
+         }
       }
    }
 }

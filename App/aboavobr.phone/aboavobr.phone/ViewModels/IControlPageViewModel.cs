@@ -7,6 +7,8 @@ namespace aboavobr.phone.ViewModels
    {
       string BatteryLifeInPercent { get; }
 
+      bool CameraIsSupported { get; }
+
       ImageSource ImageSource { get; }
    }
 }
