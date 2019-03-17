@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using aboavobr.phone.Services;
+using Xamarin.Forms;
 
 namespace aboavobr.phone.ViewModels
 {
@@ -13,12 +15,14 @@ namespace aboavobr.phone.ViewModels
       private readonly IUiService uiService;
       private string batteryLifeInPercent = UknownBatteryLife;
       private bool wasAlreadyNotified;
+      private ImageSource imageSource;
 
       public ControlPageViewModel(IAboavobrRestEndpoint aboavobrRestEndpoint, IUiService uiService)
       {
          this.aboavobrRestEndpoint = aboavobrRestEndpoint;
          this.uiService = uiService;
          new Timer(SendBatteryLifeRequest, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(30));
+         new Timer(UpdatePreviewImage, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(5));
       }
 
       public string BatteryLifeInPercent
@@ -31,6 +35,19 @@ namespace aboavobr.phone.ViewModels
          set
          {
             SetProperty(ref batteryLifeInPercent, value);
+         }
+      }
+
+      public ImageSource ImageSource
+      {
+         get
+         {
+            return imageSource;
+         }
+
+         set
+         {
+            SetProperty(ref imageSource, value);
          }
       }
 
@@ -52,6 +69,12 @@ namespace aboavobr.phone.ViewModels
          {
             BatteryLifeInPercent = UknownBatteryLife;
          }
+      }
+
+      private async void UpdatePreviewImage(object state)
+      {
+         var image = await aboavobrRestEndpoint.GetImageAsync();
+         ImageSource = ImageSource.FromStream(() => new MemoryStream(image));
       }
    }
 }

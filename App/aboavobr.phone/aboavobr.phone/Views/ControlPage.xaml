@@ -7,6 +7,7 @@
          <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
          </Grid.RowDefinitions>
          <StackLayout Orientation="Horizontal" Grid.Row="0">
             <Label Text="ABOAVOBR" 
@@ -15,6 +16,7 @@
             <Label Text="Battery:" />
             <Label Text="{Binding BatteryLifeInPercent}" />
          </StackLayout>
+         <Image Grid.Row="1" Source="{Binding ImageSource}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Aspect="AspectFill" />
       </Grid>
    </ContentPage.Content>
 </ContentPage>
