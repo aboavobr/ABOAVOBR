@@ -11,12 +11,14 @@ namespace Tests.Controllers
    {
       private Mock<ILogger<DebugController>> loggerMock;
       private Mock<ISerialCommunicationService> serialCommunicationServiceMock;
+      private Mock<ISerialPortService> serialPortServiceMock;
 
       [SetUp]
       public void Setup()
       {
          loggerMock = new Mock<ILogger<DebugController>>();
          serialCommunicationServiceMock = new Mock<ISerialCommunicationService>();
+         serialPortServiceMock = new Mock<ISerialPortService>();
       }
 
       [Test]
@@ -38,7 +40,7 @@ namespace Tests.Controllers
             "/dev/ttyACM0",
          };
 
-         serialCommunicationServiceMock.Setup(x => x.GetAvailableSerialPorts()).Returns(expectedPorts);
+         serialPortServiceMock.Setup(x => x.GetAvailableSerialPorts()).Returns(expectedPorts);
 
          var subject = CreateSubject();
 
@@ -73,7 +75,7 @@ namespace Tests.Controllers
 
       private DebugController CreateSubject()
       {
-         return new DebugController(serialCommunicationServiceMock.Object, loggerMock.Object);
+         return new DebugController(serialCommunicationServiceMock.Object, loggerMock.Object, serialPortServiceMock.Object);
       }
    }
 }

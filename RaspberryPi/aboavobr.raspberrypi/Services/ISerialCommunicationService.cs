@@ -11,8 +11,6 @@ namespace aboavobr.raspberrypi.Services
 
         void SendMessage(string message);
 
-        IEnumerable<string> GetAvailableSerialPorts();
-
         int GetBatteryLife();
     }
 }

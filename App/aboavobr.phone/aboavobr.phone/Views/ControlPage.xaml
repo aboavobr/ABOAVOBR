@@ -2,10 +2,12 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="aboavobr.phone.Views.ControlPage">
+   
    <ContentPage.Content>
       <Grid>
          <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
          </Grid.RowDefinitions>
          <StackLayout Orientation="Horizontal" Grid.Row="0">
@@ -15,6 +17,8 @@
             <Label Text="Battery:" />
             <Label Text="{Binding BatteryLifeInPercent}" />
          </StackLayout>
+         <Image Grid.Row="1" Source="{Binding ImageSource}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Aspect="AspectFill" IsVisible="{Binding IsCameraSupported}" />
+         <Label Grid.Row="1" Text="Camera not Supported" HorizontalOptions="FillAndExpand" IsVisible="{Binding DisplayCameraNotSupportedMessage}}" />
       </Grid>
    </ContentPage.Content>
 </ContentPage>

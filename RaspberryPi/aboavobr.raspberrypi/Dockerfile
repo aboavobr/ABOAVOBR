@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime-stretch-slim-arm32v7 AS base
+FROM aboavobr/raspberry-env AS base
 WORKDIR /app
 
 FROM microsoft/dotnet:2.1-sdk AS build

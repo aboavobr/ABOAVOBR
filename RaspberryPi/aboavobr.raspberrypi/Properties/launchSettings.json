@@ -30,6 +30,12 @@
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/api/debug"
+    },
+    "raspberry": {
+      "commandName": "Executable",
+      "executablePath": "/home/pi/dotnet/dotnet",
+      "commandLineArgs": "/home/pi/aboavobr/aboavobr.raspberry.dll",
+      "workingDirectory": "/home/pi/aboavobr"
     }
   }
 }

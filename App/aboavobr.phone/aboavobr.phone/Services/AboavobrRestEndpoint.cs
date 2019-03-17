@@ -8,6 +8,7 @@ namespace aboavobr.phone.Services
    public class AboavobrRestEndpoint : IAboavobrRestEndpoint
    {
       private const string AppApiEndpoint = "/api/app";
+      private const string CameraApiEndpoint = "/api/camera";
       private const string DebugApiEndpoint = "/api/debug";
 
       private string baseUrl;
@@ -61,6 +62,28 @@ namespace aboavobr.phone.Services
          return -1;
       }
 
+      public async Task<byte[]> GetImageAsync()
+      {
+         var uri = CreateCameraUri("image");
+         var response = await client.GetAsync(uri);
+
+         return await response.Content.ReadAsByteArrayAsync();
+      }
+
+      public async Task<bool> IsCameraSupported()
+      {
+         var uri = CreateCameraUri("isenabled");
+         var response = await client.GetAsync(uri);
+
+         var content = await GetResponseContentAsync(response);
+         if (!string.IsNullOrEmpty(content))
+         {
+            return bool.Parse(content);
+         }
+
+         return false;
+      }
+
       private async Task<string> GetResponseContentAsync(HttpResponseMessage response)
       {
          if (response.IsSuccessStatusCode)
@@ -75,6 +98,11 @@ namespace aboavobr.phone.Services
       private Uri CreateAppUri(string endpoint)
       {
          return CreateConnectionUri($"{AppApiEndpoint}/{endpoint}");
+      }
+
+      private Uri CreateCameraUri(string endpoint)
+      {
+         return CreateConnectionUri($"{CameraApiEndpoint}/{endpoint}");
       }
 
       private Uri CreateConnectionUri(string endpoint)
