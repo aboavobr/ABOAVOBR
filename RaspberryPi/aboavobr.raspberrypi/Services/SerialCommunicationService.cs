@@ -54,6 +54,14 @@ namespace aboavobr.raspberrypi.Services
          return batteryLife;
       }
 
+      public void Move(Direction direction)
+      {
+         logger.LogDebug($"Sending command to move in direction {direction}");
+
+         var message = $"mv:{(int)direction}";
+         serialPort.Write(message);
+      }
+
       private void InitializeCommunicationPort()
       {
          var port = string.Empty;
