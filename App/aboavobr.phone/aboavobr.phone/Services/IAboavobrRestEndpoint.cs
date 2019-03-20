@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using aboavobr.phone.ViewModels;
 
 namespace aboavobr.phone.Services
 {
@@ -12,5 +13,7 @@ namespace aboavobr.phone.Services
 
       Task<byte[]> GetImageAsync();
       Task<bool> IsCameraSupported();
+
+      Task<bool> SendMoveCommandAsync(Direction direction);
    }
 }

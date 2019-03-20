@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using aboavobr.phone.ViewModels;
 
 namespace aboavobr.phone.Services
 {
@@ -79,6 +80,19 @@ namespace aboavobr.phone.Services
          if (!string.IsNullOrEmpty(content))
          {
             return bool.Parse(content);
+         }
+
+         return false;
+      }
+
+      public async Task<bool> SendMoveCommandAsync(Direction direction)
+      {
+         var uri = CreateAppUri("move");
+         var response = await client.PostAsync(uri, new StringContent($"{(int)direction}", Encoding.UTF8, "application/json"));
+
+         if (response.IsSuccessStatusCode)
+         {
+            return true;
          }
 
          return false;
