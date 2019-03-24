@@ -12,5 +12,7 @@ namespace aboavobr.phone.ViewModels
       bool DisplayCameraNotSupportedMessage { get; }
 
       ImageSource ImageSource { get; }
+
+      ICommand MoveCommand { get; }
    }
 }

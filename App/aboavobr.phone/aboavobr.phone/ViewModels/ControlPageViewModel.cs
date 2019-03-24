@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using aboavobr.phone.Services;
 using Xamarin.Forms;
 
@@ -26,6 +28,8 @@ namespace aboavobr.phone.ViewModels
       {
          this.aboavobrRestEndpoint = aboavobrRestEndpoint;
          this.uiService = uiService;
+
+         MoveCommand = new DelegateCommand<Direction>(ExecuteMoveCommand);
       }
 
       public string BatteryLifeInPercent
@@ -68,6 +72,8 @@ namespace aboavobr.phone.ViewModels
       }
 
       public bool DisplayCameraNotSupportedMessage => !CameraIsSupported;
+
+      public ICommand MoveCommand { get; }
 
       public void OnAppearing()
       {
@@ -114,6 +120,11 @@ namespace aboavobr.phone.ViewModels
             var image = await aboavobrRestEndpoint.GetImageAsync();
             ImageSource = ImageSource.FromStream(() => new MemoryStream(image));
          }
+      }
+
+      private async void ExecuteMoveCommand(Direction direction)
+      {
+         var success = await aboavobrRestEndpoint.SendMoveCommandAsync(direction);
       }
    }
 }

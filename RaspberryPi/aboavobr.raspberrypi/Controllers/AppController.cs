@@ -29,5 +29,12 @@ namespace aboavobr.raspberrypi.Controllers
       {
          return new ActionResult<int>(serialCommunicaitonService.GetBatteryLife());
       }
+
+      [HttpPost("move")]
+      public ActionResult PostMoveCommand([FromBody]Direction direction)
+      {
+         serialCommunicaitonService.Move(direction);
+         return Ok();
+      }
    }
 }

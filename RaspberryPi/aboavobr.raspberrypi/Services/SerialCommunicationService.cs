@@ -11,6 +11,7 @@ namespace aboavobr.raspberrypi.Services
    {
       private const string BatteryLifeIdentifier = "batteryLife";
       private const string GetBatteryLifeCommand = "getBatteryLife";
+      private const string SendMoveCommand = "mv:{0}";
       private const string CommandSeparator = ":";
 
       private readonly IHostingEnvironment environment;
@@ -52,6 +53,14 @@ namespace aboavobr.raspberrypi.Services
       public int GetBatteryLife()
       {
          return batteryLife;
+      }
+
+      public void Move(Direction direction)
+      {
+         logger.LogDebug($"Sending command to move in direction {direction}");
+
+         var message = string.Format(SendMoveCommand, (int)direction);
+         serialPort.Write(message);
       }
 
       private void InitializeCommunicationPort()
