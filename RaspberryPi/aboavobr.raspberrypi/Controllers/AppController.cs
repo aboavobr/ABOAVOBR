@@ -20,6 +20,10 @@ namespace aboavobr.raspberrypi.Controllers
          return Ok();
       }
 
+      /// <summary>
+      /// Gets the battery life in percentage.
+      /// </summary>
+      /// <returns>The battery state in percentage</returns>
       [HttpGet("battery")]
       public ActionResult<int> GetBatteryLife()
       {
