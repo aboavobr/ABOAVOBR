@@ -7,9 +7,9 @@ MotorController::MotorController(byte enablePin, byte in1, byte in2)
   this->in1 = in1;
   this->in2 = in2;
 
-  Serial.println(enablePin);
-  Serial.println(in1);
-  Serial.println(in2);
+  //Serial.println(enablePin);
+  //Serial.println(in1);
+  //Serial.println(in2);
 
   pinMode(enablePin, OUTPUT);
   pinMode(in1, OUTPUT);

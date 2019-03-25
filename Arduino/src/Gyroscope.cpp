@@ -6,6 +6,7 @@
 #include "MPU6050_6Axis_MotionApps20.h"
 
 //#define OUTPUT_READABLE_YAWPITCHROLL
+//#define OUTPUT_READABLE_REALACCEL
 
 uint8_t devStatus;      // return status after each device operation (0 = success, !0 = error)
 uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
@@ -16,8 +17,8 @@ uint8_t fifoBuffer[64]; // FIFO storage buffer
 
 // orientation/motion vars
 Quaternion q;           // [w, x, y, z]         quaternion container
-//VectorInt16 aa;         // [x, y, z]            accel sensor measurements
-//VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
+VectorInt16 aa;         // [x, y, z]            accel sensor measurements
+VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
 //VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
 VectorFloat gravity;    // [x, y, z]            gravity vector
 //float euler[3];         // [psi, theta, phi]    Euler angle container

@@ -6,7 +6,7 @@
 #define MovementController_h_
 
 #include "Arduino.h"
-#include "PID_v1.h"
+#include "PIDController.h"
 #include "Gyroscope.h"
 #include "MotorController.h"
 
@@ -15,17 +15,22 @@ class MovementController
   public:
     MovementController(Gyroscope *inGyroscope, MotorController *leftMotor, MotorController *rightMotor);
     void Loop();
-    
+    void SetPIDProportional(double proportional);
+    void SetPIDIntegral(double integral);
+    void SetPIDDerivative(double derivative);
+    void SetZeroPitch();
+    void Start();
+    void Stop();
+
   private:
     //Define Variables we'll be connecting to
-    double PIDForwardSetpoint, PIDFordwardInput, PIDForwardOutput;
-    double PIDBackwardSetpoint, PIDBackwardInput, PIDBackwardOutput;
-    double PIDForwardMovement;
-    
+    double ZeroPitchOffset;
+    bool HasStarted;
+    float LastPitch = 0;
+
     //Specify the links and initial tuning parameters
-    double Kp=25, Ki=1, Kd=0;
-    PID *PIDForward;
-    PID *PIDBackward;
+    double Kp = 60, Ki = 0.5, Kd = 2500;
+    PIDController *PIDForward;
     Gyroscope *gyroscope;
     MotorController* leftMotor;
     MotorController *rightMotor;
