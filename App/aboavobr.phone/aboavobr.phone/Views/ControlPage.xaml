@@ -1,11 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:aboavobr.phone.ViewModels"
              x:Class="aboavobr.phone.Views.ControlPage">
+
    <ContentPage.Content>
       <Grid>
          <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
          </Grid.RowDefinitions>
          <StackLayout Orientation="Horizontal" Grid.Row="0">
@@ -15,6 +18,26 @@
             <Label Text="Battery:" />
             <Label Text="{Binding BatteryLifeInPercent}" />
          </StackLayout>
+         <Image Grid.Row="1" Source="{Binding ImageSource}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Aspect="AspectFill" IsVisible="{Binding IsCameraSupported}" />
+         <Label Grid.Row="1" Text="Camera not Supported" HorizontalOptions="FillAndExpand" IsVisible="{Binding DisplayCameraNotSupportedMessage}" />
+
+         <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+               <RowDefinition Height="*" />
+               <RowDefinition Height="*" />
+               <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+               <ColumnDefinition Width="*" />
+               <ColumnDefinition Width="*" />
+               <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Text="↑" Grid.Row="0" Grid.Column="1" Command="{Binding MoveCommand}" CommandParameter="{x:Static viewModels:Direction.Forward}"/>
+            <Button Text="←" Grid.Row="1" Grid.Column="0" Command="{Binding MoveCommand}" CommandParameter="{x:Static viewModels:Direction.Left}"/>
+            <Button Text="→" Grid.Row="1" Grid.Column="2" Command="{Binding MoveCommand}" CommandParameter="{x:Static viewModels:Direction.Right}"/>
+            <Button Text="↓" Grid.Row="2" Grid.Column="1" Command="{Binding MoveCommand}" CommandParameter="{x:Static viewModels:Direction.Backward}"/>
+         </Grid>
       </Grid>
    </ContentPage.Content>
 </ContentPage>

@@ -13,6 +13,7 @@ namespace aboavobr.raspberry.Tests.Services
       private Mock<IConfiguration> configurationMock;
       private Mock<ILogger<SerialCommunicationService>> loggerMock;
       private Mock<ISerialPortFactory> serialPortFactoryMock;
+      private Mock<ISerialPortService> serialPortServiceMock;
 
       [SetUp]
       public void Setup()
@@ -21,6 +22,7 @@ namespace aboavobr.raspberry.Tests.Services
          configurationMock = new Mock<IConfiguration>();
          loggerMock = new Mock<ILogger<SerialCommunicationService>>();
          serialPortFactoryMock = new Mock<ISerialPortFactory>();
+         serialPortServiceMock = new Mock<ISerialPortService>();
       }
 
       private SerialCommunicationService CreateSubject()
@@ -29,7 +31,8 @@ namespace aboavobr.raspberry.Tests.Services
             hostingEnvironmentMock.Object,
             configurationMock.Object,
             loggerMock.Object,
-            serialPortFactoryMock.Object);
+            serialPortFactoryMock.Object,
+            serialPortServiceMock.Object);
       }
    }
 }

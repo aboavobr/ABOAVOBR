@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading;
+using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Win32;
 
 namespace aboavobr.raspberrypi.Services
 {
@@ -13,6 +11,7 @@ namespace aboavobr.raspberrypi.Services
    {
       private const string BatteryLifeIdentifier = "batteryLife";
       private const string GetBatteryLifeCommand = "getBatteryLife";
+      private const string SendMoveCommand = "mv:{0}";
       private const string CommandSeparator = ":";
 
       private readonly IHostingEnvironment environment;
@@ -22,6 +21,7 @@ namespace aboavobr.raspberrypi.Services
 
       private int batteryLife = -1;
 
+      private readonly ISerialPortService serialPortService;
       private ISerialPort serialPort;
       private Timer batteryLifeTimer;
 
@@ -29,13 +29,14 @@ namespace aboavobr.raspberrypi.Services
          IHostingEnvironment environment,
          IConfiguration configuration,
          ILogger<SerialCommunicationService> logger,
-         ISerialPortFactory serialPortFactory)
+         ISerialPortFactory serialPortFactory,
+         ISerialPortService serialPortService)
       {
          this.environment = environment;
          this.configuration = configuration;
          this.logger = logger;
          this.serialPortFactory = serialPortFactory;
-
+         this.serialPortService = serialPortService;
          InitializeCommunicationPort();
          SetupBatteryLifePolling();
       }
@@ -49,14 +50,17 @@ namespace aboavobr.raspberrypi.Services
          serialPort.Write(message);
       }
 
-      public IEnumerable<string> GetAvailableSerialPorts()
-      {
-         return GetAvailablePorts();
-      }
-
       public int GetBatteryLife()
       {
          return batteryLife;
+      }
+
+      public void Move(Direction direction)
+      {
+         logger.LogDebug($"Sending command to move in direction {direction}");
+
+         var message = string.Format(SendMoveCommand, (int)direction);
+         serialPort.Write(message);
       }
 
       private void InitializeCommunicationPort()
@@ -93,14 +97,14 @@ namespace aboavobr.raspberrypi.Services
             {
                logger.LogDebug("No fixed port configuration found - scanning for ports...");
 
-               var availableDevices = GetAvailablePorts();
+               var availableDevices = serialPortService.GetAvailableSerialPorts().ToList();
 
-               if (availableDevices.Length == 1)
+               if (availableDevices.Count == 1)
                {
                   port = availableDevices[0];
                   logger.LogDebug($"Found exactly one available port - will use this one");
                }
-               else if (availableDevices.Length > 1)
+               else if (availableDevices.Count > 1)
                {
                   port = availableDevices[0];
                   logger.LogDebug($"Found multiple ports - will use first one. If this is not the right device, consider specifying it using the SerialPort configuration");
@@ -169,57 +173,6 @@ namespace aboavobr.raspberrypi.Services
       private void OnSerialPortConnectionChanged(object sender, bool isConnected)
       {
          logger.LogDebug($"Serial Port Connection Changed: {isConnected}");
-      }
-
-      private string[] GetAvailablePorts()
-      {
-         // Copied from https://github.com/JTrotta/MonoSerialPort/blob/006ac36503ef2c1e2a682961fc0720f358e21ca0/Port/SerialPort.cs
-         var platform = (int)Environment.OSVersion.Platform;
-         var availableSerialPorts = new List<string>();
-
-         logger.LogDebug("Starting to scan the available communication ports...");
-
-         // Are we on Unix?
-         if (platform == 4 || platform == 128)
-         {
-            logger.LogDebug("We are on a Unix System, will look for /dev/tty* ports");
-
-            var ttys = Directory.GetFiles("/dev/", "tty*");
-            foreach (var device in ttys)
-            {
-               logger.LogDebug($"Found Port: {device}");
-
-               if (device.StartsWith("/dev/ttyS") || device.StartsWith("/dev/ttyUSB") || device.StartsWith("/dev/ttyACM"))
-               {
-                  availableSerialPorts.Add(device);
-               }
-            }
-         }
-         else
-         {
-            logger.LogDebug("We are on a Windows System, will check registriy for COM Ports");
-
-            // Do Windows Magic
-            using (var subkey = Registry.LocalMachine.OpenSubKey("HARDWARE\\DEVICEMAP\\SERIALCOMM"))
-            {
-               if (subkey != null)
-               {
-                  var names = subkey.GetValueNames();
-                  foreach (var value in names)
-                  {
-                     var port = subkey.GetValue(value, "").ToString();
-                     if (!string.IsNullOrEmpty(port))
-                     {
-                        logger.LogDebug($"Found Port: {port}");
-
-                        availableSerialPorts.Add(port);
-                     }
-                  }
-               }
-            }
-         }
-
-         return availableSerialPorts.ToArray();
       }
    }
 }

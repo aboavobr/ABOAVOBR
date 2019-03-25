@@ -1,18 +1,15 @@
-﻿
-using System.Collections.Generic;
-
-namespace aboavobr.raspberrypi.Services
+﻿namespace aboavobr.raspberrypi.Services
 {
-    public interface ISerialCommunicationService
-    {
-        string PortName { get; }
+   public interface ISerialCommunicationService
+   {
+      string PortName { get; }
 
-        bool IsConnected { get; }
+      bool IsConnected { get; }
 
-        void SendMessage(string message);
+      void SendMessage(string message);
 
-        IEnumerable<string> GetAvailableSerialPorts();
+      int GetBatteryLife();
 
-        int GetBatteryLife();
-    }
+      void Move(Direction direction);
+   }
 }

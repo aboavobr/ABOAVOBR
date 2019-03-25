@@ -11,12 +11,14 @@ namespace aboavobr.raspberrypi.Controllers
    public class DebugController : ControllerBase
    {
       private readonly ILogger<DebugController> logger;
+      private readonly ISerialPortService serialPortService;
       private readonly ISerialCommunicationService serialCommunicationService;
 
-      public DebugController(ISerialCommunicationService serialCommunicationService, ILogger<DebugController> logger)
+      public DebugController(ISerialCommunicationService serialCommunicationService, ILogger<DebugController> logger, ISerialPortService serialPortService)
       {
          this.serialCommunicationService = serialCommunicationService;
          this.logger = logger;
+         this.serialPortService = serialPortService;
       }
 
       // GET api/debug
@@ -30,7 +32,7 @@ namespace aboavobr.raspberrypi.Controllers
       [HttpGet("serial/ports")]
       public ActionResult<IEnumerable<string>> GetSerialPorts()
       {
-         return new ActionResult<IEnumerable<string>>(serialCommunicationService.GetAvailableSerialPorts());
+         return new ActionResult<IEnumerable<string>>(serialPortService.GetAvailableSerialPorts());
       }
 
       [HttpGet("serial/port")]
