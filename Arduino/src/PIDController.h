@@ -18,9 +18,10 @@ class PIDController
     float target, max, min, kp, ki, kd;
     float PID_P, PID_I, PID_D;
     float PID_error, previous_error;
-    float elapsedTime, timePrev;
+    float elapsedTime;
     float PID_value = 0;
     int refreshInterval;
+    unsigned long timePrev;
 };
 
 #endif

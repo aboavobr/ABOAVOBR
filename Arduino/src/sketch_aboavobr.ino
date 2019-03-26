@@ -148,4 +148,14 @@ void handleCommand()
       Serial.println("Stopping");
     #endif
   }
+  else if (command == "MF")
+  {
+    int value = valueString.toFloat();
+    movementController->MoveForward(value);
+
+    #ifdef OUTPUT_COMMAND_INFORMATION
+      Serial.print("Moving forward (ms): ");
+      Serial.println(value);
+    #endif
+  }
 }

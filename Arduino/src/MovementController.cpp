@@ -4,7 +4,7 @@
 
 //#define OUTPUT_PID_DATA
 //#define OUTPUT_GYROSCOPE_DATA
-//#define OUTPUT_MOTOR_CONTROL_DATA
+#define OUTPUT_MOTOR_CONTROL_DATA
 
 MovementController::MovementController(Gyroscope *inGyroscope, MotorController *leftMotor, MotorController *rightMotor)
 {
@@ -16,6 +16,8 @@ MovementController::MovementController(Gyroscope *inGyroscope, MotorController *
 
   this->leftMotor = leftMotor;
   this->rightMotor = rightMotor;
+
+  direction == None;
 }
 
 void MovementController::SetZeroPitch()
@@ -37,22 +39,28 @@ void MovementController::Stop()
   HasStarted = false;
 }
 
-void MovementController::SetPIDProportional(double proportional)
+void MovementController::SetPIDProportional(float proportional)
 {
   Kp = proportional;
   PIDForward->SetProportional(Kp);
 }
 
-void MovementController::SetPIDIntegral(double integral)
+void MovementController::SetPIDIntegral(float integral)
 {
   Ki = integral;
   PIDForward->SetIntegral(Ki);
 }
 
-void MovementController::SetPIDDerivative(double derivative)
+void MovementController::SetPIDDerivative(float derivative)
 {
   Kd = derivative;
   PIDForward->SetDerivative(Kd);
+}
+
+void MovementController::MoveForward(int duration)
+{
+  direction = Forward;
+  controlDirectionStopTime = millis() + duration;
 }
 
 void MovementController::Loop()
@@ -62,35 +70,57 @@ void MovementController::Loop()
     return;
   }
 
+  if (millis() > controlDirectionStopTime)
+  {
+    direction = None;
+  }
+
   PIDForward->UpdateInput(gyroscope->GetPitch() - ZeroPitchOffset);
-  float PIDForwardOutput = PIDForward->GetOutput();
+  int PIDForwardOutput = PIDForward->GetOutput();
+  int leftMotorOutput = PIDForwardOutput;
+  int rightMotorOutput = PIDForwardOutput;
+
+  if (direction == Forward)
+  {
+    leftMotorOutput += 40;
+    rightMotorOutput += 40;
+  }
 
   if (gyroscope->GetPitch() > 25 || gyroscope->GetPitch() < -25)
   {
     leftMotor->SetPwm(0x00);
     rightMotor->SetPwm(0x00);
+    return;
   }
-  else if (PIDForwardOutput > 0)
+  
+  if (leftMotorOutput > 0)
   {
     leftMotor->SetDirection(MotorController::Forward); 
-    leftMotor->SetPwm(PIDForwardOutput + 30);
-    rightMotor->SetDirection(MotorController::Forward);
-    rightMotor->SetPwm(PIDForwardOutput + 30);
+    leftMotor->SetPwm(leftMotorOutput + 30);
 
     #ifdef OUTPUT_MOTOR_CONTROL_DATA
       Serial.print("Forward with PWM ");
     #endif
   }
-  else if (PIDForwardOutput < 0)
+  else
   {
     leftMotor->SetDirection(MotorController::Backward);                                                                                                                                                                                                                                                                                                     
-    leftMotor->SetPwm((PIDForwardOutput - 30) * -1);
-    rightMotor->SetDirection(MotorController::Backward);
-    rightMotor->SetPwm((PIDForwardOutput - 30) * -1);
+    leftMotor->SetPwm((leftMotorOutput - 30) * -1);
 
     #ifdef OUTPUT_MOTOR_CONTROL_DATA
       Serial.print("Backward. ");
     #endif
+  }
+
+  if (rightMotorOutput > 0)
+  {
+    rightMotor->SetDirection(MotorController::Forward); 
+    rightMotor->SetPwm(rightMotorOutput + 30);
+  }
+  else
+  {
+    rightMotor->SetDirection(MotorController::Backward);                                                                                                                                                                                                                                                                                                     
+    rightMotor->SetPwm((rightMotorOutput - 30) * -1);
   }
 
   #ifdef OUTPUT_MOTOR_CONTROL_DATA

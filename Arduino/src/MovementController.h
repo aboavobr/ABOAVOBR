@@ -13,14 +13,24 @@
 class MovementController
 {
   public:
+    enum ControlDirection
+    {
+      None = 0,
+      Forward = 1,
+      Backward = 2,
+      RotateLeft = 3,
+      RotateRight = 4
+    };
+  
     MovementController(Gyroscope *inGyroscope, MotorController *leftMotor, MotorController *rightMotor);
     void Loop();
-    void SetPIDProportional(double proportional);
-    void SetPIDIntegral(double integral);
-    void SetPIDDerivative(double derivative);
+    void SetPIDProportional(float proportional);
+    void SetPIDIntegral(float integral);
+    void SetPIDDerivative(float derivative);
     void SetZeroPitch();
     void Start();
     void Stop();
+    void MoveForward(int duration);
 
   private:
     //Define Variables we'll be connecting to
@@ -29,11 +39,13 @@ class MovementController
     float LastPitch = 0;
 
     //Specify the links and initial tuning parameters
-    double Kp = 60, Ki = 0.5, Kd = 2500;
+    float Kp = 60, Ki = 0.5, Kd = 2500;
     PIDController *PIDForward;
     Gyroscope *gyroscope;
     MotorController* leftMotor;
     MotorController *rightMotor;
+    ControlDirection direction;
+    unsigned long controlDirectionStopTime;
 };
 
 #endif
