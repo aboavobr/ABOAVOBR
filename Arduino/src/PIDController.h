@@ -13,6 +13,7 @@ class PIDController
     void SetIntegral(float integral);
     void SetDerivative(float derivative);
     void ResetPID();
+    void SetTarget(float target);
 
   private:
     float target, max, min, kp, ki, kd;

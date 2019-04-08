@@ -18,6 +18,11 @@ PIDController::PIDController(float target, float max, float min, float kp, float
   timePrev = millis();
 }
 
+void PIDController::SetTarget(float target)
+{
+  this->target = target;
+}
+
 void PIDController::ResetPID()
 {
   PID_I = 0;

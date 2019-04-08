@@ -7,6 +7,7 @@
 
 //#define OUTPUT_READABLE_YAWPITCHROLL
 //#define OUTPUT_READABLE_REALACCEL
+//#define PLOT_REALACCEL
 
 uint8_t devStatus;      // return status after each device operation (0 = success, !0 = error)
 uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
@@ -14,6 +15,11 @@ bool dmpReady = false;  // set true if DMP init was successful
 uint16_t packetSize;    // expected DMP packet size (default is 42 bytes)
 uint16_t fifoCount;     // count of all bytes currently in FIFO
 uint8_t fifoBuffer[64]; // FIFO storage buffer
+
+#ifdef PLOT_REALACCEL
+  #include "SimPlot.h"
+  SimPlot simPlot;
+#endif
 
 // orientation/motion vars
 Quaternion q;           // [w, x, y, z]         quaternion container
@@ -88,6 +94,21 @@ float Gyroscope::GetRoll()
   return ypr[2] * 180/M_PI;
 }
 
+int Gyroscope::RealAccelerationX()
+{
+  return aaReal.x;
+}
+
+int Gyroscope::RealAccelerationY()
+{
+  return aaReal.y;
+}
+
+int Gyroscope::RealAccelerationZ()
+{
+  return aaReal.z;
+}
+
 void Gyroscope::Loop()
 {
     // if programming failed, don't try to do anything
@@ -136,7 +157,11 @@ void Gyroscope::Loop()
 
         mpu.dmpGetQuaternion(&q, fifoBuffer);
         mpu.dmpGetGravity(&gravity, &q);
+        
         mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+
+        mpu.dmpGetAccel(&aa, fifoBuffer);
+        mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
 
         #ifdef OUTPUT_READABLE_QUATERNION
             // display quaternion values in easy matrix form: w x y z
@@ -215,6 +240,10 @@ void Gyroscope::Loop()
             teapotPacket[9] = fifoBuffer[13];
             Serial.write(teapotPacket, 14);
             teapotPacket[11]++; // packetCount, loops at 0xFF on purpose
+        #endif
+
+        #ifdef PLOT_REALACCEL
+          simPlot.Plot(aaReal.x, aaReal.y, aaReal.z, 0);
         #endif
     }  
 }

@@ -4,7 +4,7 @@
 
 //#define OUTPUT_PID_DATA
 //#define OUTPUT_GYROSCOPE_DATA
-#define OUTPUT_MOTOR_CONTROL_DATA
+//#define OUTPUT_MOTOR_CONTROL_DATA
 
 MovementController::MovementController(Gyroscope *inGyroscope, MotorController *leftMotor, MotorController *rightMotor)
 {
@@ -82,8 +82,7 @@ void MovementController::Loop()
 
   if (direction == Forward)
   {
-    leftMotorOutput += 40;
-    rightMotorOutput += 40;
+    PIDForward->SetTarget(5);
   }
 
   if (gyroscope->GetPitch() > 25 || gyroscope->GetPitch() < -25)
