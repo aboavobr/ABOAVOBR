@@ -4,26 +4,24 @@ LABEL maintainer "benj.huser@gmail.com"
 
 RUN [ "cross-build-start" ]
 
+RUN sed -i '/jessie-updates/d' /etc/apt/sources.list
 RUN apt-get update && \
     apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     # Generic
-    build-essential \
-    curl \
-    wget \
     git \
-    # Python
-    python \
-    python-pip \
-    picocom \
-    gcc-avr \
-    avr-libc \
-    avrdude \
-    arduino-core && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    wget \
+    bzip2
 
-RUN pip install ino
+ENV USER=pi
+
+# Install arduino-cli
+RUN wget https://downloads.arduino.cc/arduino-cli/arduino-cli-latest-linuxarm.tar.bz2 && \
+    tar xjf *.tar.bz2 && \
+    rm *.tar.bz2 && \
+    mv arduino-cli* /usr/local/bin/arduino-cli && \
+    arduino-cli core update-index && \
+    arduino-cli core install arduino:avr
 
 WORKDIR /src
 COPY main.sh /
