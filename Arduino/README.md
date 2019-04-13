@@ -11,17 +11,9 @@ To code you can use the official Arduino that can be downloaded from the [Arduin
 You can build/verify your sketches with it and directly upload it to a connected Arduino.
 
 ### Docker
-If you don't want to install the Arduino IDE you can as well make use of the Docker container [strm/dev-arduino](https://hub.docker.com/r/strm/dev-arduino).  
-After you installed docker, run the following command from this directory to build the sketch:  
-  
-    docker run --rm -it -v "$(pwd):/src" strm/dev-arduino build  
+If you don't want to install the Arduino IDE you can as well make use of the docker container [aboavbor/arduino-buildenv](https://hub.docker.com/r/aboavobr/arduino-buildenv).  
 
-To upload the sketch run:  
-
-    docker run --rm -it -v "$(pwd):/src" --device=/dev/ttyACM0 strm/dev-arduino upload  
-
-**Note:** The uploading only works on a linux device, as passing through devices within Docker for Windows is not supported.  
-If your device is named differently, then adjust the path according to the name.
+See more info in the specific [Readme](https://github.com/aboavobr/ABOAVOBR/tree/master/Arduino-BuildEnv).
 
 ## Continuous Integration and Deplyoment
 A CI build to verify the sketch is setup in [Azure Devops](https://benjsawesometfstest.visualstudio.com/ABOAVOBR/_build?definitionId=34&_a=summary).  
@@ -35,18 +27,9 @@ This image will automatically flash the Arduino from the Raspberry Pi when execu
 
 And then upload to the Arduino with:  
 
-    docker run --device=/dev/ttyACM0 aboavobr/arduino  
+    docker run --device=/dev/ttyACM0 aboavobr/arduino arduino:avr:uno /dev/ttyACM0 
 
 You can specify two optional arguments and pass that to the container:  
-- The Board Model according to the "ino" tool used for building and uploading  
-- The serial port to use  
-
-The default board model is the "uno", you only need to specify something else if you have a different arduino running.  
-You can find more infos on available board models on the [ino quickstart](http://inotool.org/quickstart#tweaking-parameters).  
-By default ino is guessing the serial port, by the fact that we only pass one to the container it should work out of the box. However if you have a different scenario you can still specify it.
-
-Here an example of a parametrized build and upload from a raspberry pi:  
-
-
-    docker run --device=/dev/ttyACM0 aboavobr/arduino mega2560 /dev/ttyACM0
+- The Board Model according to the [arduino-cli tool](https://github.com/arduino/arduino-cli) used for building and uploading (The default value is set to *arduino:avr:uno*) 
+- The serial port to use (The default value is set to */dev/ttyACM0*) 
 
