@@ -1,12 +1,9 @@
-# First Input whether to compile or upload
-# Second is Board Model, default is the key for the arduino uno (arduino:avr:uno)
-# Third is the port to use (only needed for upload)
-# Check https://github.com/arduino/arduino-cli for Actions etc.
-ACTION="compile" #upload
+#!/bin/sh
+
+ACTION="compile"
 SKETCH=""
 BOARD_MODEL="arduino:avr:uno"
 PORT=""
-
 
 if [ -z "$1" ]
   then
@@ -52,4 +49,6 @@ else
   PORT="-p $5"
 fi
 
-arduino-cli $ACTION $PORT --fqbn $BOARD_MODEL $SKETCH
+ARGUMENTS="$ACTION $PORT --fqbn $BOARD_MODEL $SKETCH"
+
+arduino-cli $ARGUMENTS

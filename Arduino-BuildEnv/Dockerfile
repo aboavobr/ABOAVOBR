@@ -1,10 +1,7 @@
-FROM resin/armv7hf-debian-qemu
+FROM balenalib/rpi-raspbian
 
 LABEL maintainer "benj.huser@gmail.com"
 
-RUN [ "cross-build-start" ]
-
-RUN sed -i '/jessie-updates/d' /etc/apt/sources.list
 RUN apt-get update && \
     apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -26,6 +23,5 @@ RUN wget https://downloads.arduino.cc/arduino-cli/arduino-cli-latest-linuxarm.ta
 WORKDIR /src
 COPY main.sh /
 
+RUN chmod +x /main.sh
 ENTRYPOINT ["sh", "/main.sh"]
-
-RUN [ "cross-build-end" ] 
