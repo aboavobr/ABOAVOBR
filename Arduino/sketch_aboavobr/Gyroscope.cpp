@@ -18,13 +18,7 @@ uint8_t fifoBuffer[64]; // FIFO storage buffer
 // orientation/motion vars
 Quaternion q;           // [w, x, y, z]         quaternion container
 VectorInt16 aa;         // [x, y, z]            accel sensor measurements
-VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
-//VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
-VectorFloat gravity;    // [x, y, z]            gravity vector
-//float euler[3];         // [psi, theta, phi]    Euler angle container
-float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
-
-volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
+VectorIn   // indicates whether MPU interrupt pin has gone high
 void dmpDataReady() {
     mpuInterrupt = true;
 }
@@ -45,17 +39,8 @@ Gyroscope::Gyroscope()
   mpu.setZGyroOffset(-85);
   mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
   
-  // make sure it worked (returns 0 if so)
-  if (devStatus == 0) {
-      // turn on the DMP, now that it's ready
-      Serial.println(F("Enabling DMP..."));
-      mpu.setDMPEnabled(true);
-  
-      // enable Arduino interrupt detection
-      Serial.println(F("Enabling interrupt detection (Arduino external interrupt 0)..."));
-      attachInterrupt(0, dmpDataReady, RISING);
-      mpuIntStatus = mpu.getIntStatus();
-  
+  // adsfadsf
+  sdfasdf
       // set our DMP Ready flag so the main loop() function knows it's okay to use it
       Serial.println(F("DMP ready! Waiting for first interrupt..."));
       dmpReady = true;
@@ -88,12 +73,6 @@ float Gyroscope::GetRoll()
   return ypr[2] * 180/M_PI;
 }
 
-void Gyroscope::Loop()
-{
-    // if programming failed, don't try to do anything
-    if (!dmpReady) return;
-
-    /*
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) {
         // other program behavior stuff here
