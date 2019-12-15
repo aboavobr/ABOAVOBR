@@ -117,6 +117,22 @@ Motor controller - (ground)
 
 ![](./Construction/20191211_202011.jpg)
 
+Connect the motors to the motor controller. You can switch the connections later if the wrong wheel is turning.
+![](./Construction/20191211_204043.jpg)
+
+![](./Construction/20191211_204048.jpg)
+
+Connect the logic wires
+![](./Construction/20191211_205843.jpg)
+
+![](./Construction/20191211_210627.jpg)
+
+Connect the Arduino to the DC to USB converter. You might have to make a frankencable to make it fit. Try to find a cable which has a very short connector as there is not much space on the converter side.
+
+Alternatively you can connect the battery +/- directly to the voltage input of the Arduino, as it will run just fine on a 2S LIPO.
+Note: This is a temporary solution. The Arduino will be powered from the Raspberry when we finalize everything.
+![](./Construction/20191215_114205.jpg)
+
 Schematics
 ![](./Construction/ABOAVOBR_schematic_bb.jpg)
 
